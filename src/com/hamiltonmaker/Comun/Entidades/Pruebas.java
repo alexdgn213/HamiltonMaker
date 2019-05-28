@@ -106,7 +106,9 @@ public class Pruebas {
        Tablero tablero = new Tablero();
        tablero.generar(tamano);
        ArrayList<CaminoHamiltoniano> caminos = tablero.depthFirst(inicio,fin);
-       return caminos;
+       ArrayList<CaminoHamiltoniano> caminosInt = new ArrayList<CaminoHamiltoniano>();
+       if(caminos.size()>0) caminosInt = CaminoHamiltoniano.intersectar(caminos.get(0),caminos);
+       return caminosInt;
     }
 
     public static CaminoHamiltoniano Prueba5(int tamano) {

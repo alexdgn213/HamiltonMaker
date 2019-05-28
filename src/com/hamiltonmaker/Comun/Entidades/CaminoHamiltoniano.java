@@ -1,6 +1,7 @@
 package com.hamiltonmaker.Comun.Entidades;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
@@ -17,7 +18,9 @@ public class CaminoHamiltoniano {
         this.nodos = new ArrayList<Nodo>();
     }
 
-    public CaminoHamiltoniano(ArrayList<Nodo> nodos, LinkedList<Nodo> orden) {
+    public CaminoHamiltoniano(ArrayList<Nodo> nodos, LinkedList<Nodo> orden, int inicio, int fin) {
+        this.inicio = inicio;
+        this.fin = fin;
         this.nodos = new ArrayList<Nodo>();
         for(Nodo nodo: nodos){
             if(nodo!=null) this.nodos.add(nodo.clonar());
@@ -33,7 +36,9 @@ public class CaminoHamiltoniano {
         }
     }
 
-    public CaminoHamiltoniano(ArrayList<Nodo> nodos) {
+    public CaminoHamiltoniano(ArrayList<Nodo> nodos, int inicio, int fin) {
+        this.inicio = inicio;
+        this.fin = fin;
         this.nodos = new ArrayList<Nodo>();
         for(Nodo nodo: nodos){
             if(nodo!=null) this.nodos.add(nodo.clonar());
@@ -89,6 +94,7 @@ public class CaminoHamiltoniano {
             }
 
         }
+        int i = 0;
         for(Nodo n:this.nodos){
             if(n!=null){
                 if(n.isHabilitado()){
@@ -97,6 +103,15 @@ public class CaminoHamiltoniano {
                     double radio =  100 / Math.sqrt(this.nodos.size());
                     gc.fillOval(move(n.getPosX(),x)-radio/2, move(n.getPosY(),y)-radio/2, radio, radio);
                     gc.strokeOval(move(n.getPosX(),x)-radio/2, move(n.getPosY(),y)-radio/2, radio, radio);
+
+                    if(i==this.inicio) {
+                        final Image image = new Image("/images/i_play.png");
+                        gc.drawImage(image,move(n.getPosX(),x)-radio/2+2.5, move(n.getPosY(),y)-radio/2+2.5, radio-5, radio-5);
+                    }
+                    if(i==this.fin) {
+                        final Image image = new Image("/images/i_pause.png");
+                        gc.drawImage(image,move(n.getPosX(),x)-radio/2+2.5, move(n.getPosY(),y)-radio/2+2.5, radio-5, radio-5);
+                    }
                 }
                 else{
                     gc.setFill(Color.GRAY);
@@ -107,6 +122,7 @@ public class CaminoHamiltoniano {
                 }
 
             }
+            i++;
         }
     }
 
@@ -143,6 +159,15 @@ public class CaminoHamiltoniano {
         return interseccion;
     }
 
+    public static ArrayList<CaminoHamiltoniano> intersectar(CaminoHamiltoniano camino1, ArrayList<CaminoHamiltoniano> caminos){
+        ArrayList<CaminoHamiltoniano> intersecciones = new ArrayList<CaminoHamiltoniano>();
+        for (CaminoHamiltoniano c : caminos)
+            if(!camino1.comparar(c))
+                intersecciones.add(intersectar(camino1,c));
+        return intersecciones;
+    }
+
+
     public boolean contiene(CaminoHamiltoniano camino){
         boolean contenido = true;
         if(this.inicio!=camino.inicio || this.fin!=camino.fin)
@@ -153,7 +178,6 @@ public class CaminoHamiltoniano {
                 contenido = false;
             }
         }
-        System.out.println(contenido);
         return contenido;
     }
 
@@ -168,12 +192,6 @@ public class CaminoHamiltoniano {
             }
         }
         return igual;
-    }
-
-    //Algoritmo DFS para hallar todos los caminos con mismo origen y fin
-    public void caminosComparables(CaminoHamiltoniano caminoFinal, Nodo nodo){
-
-
     }
 
     @Override
