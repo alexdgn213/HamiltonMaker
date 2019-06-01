@@ -49,7 +49,7 @@ public class Controller {
                 GraphicsContext gc = canvas1.getGraphicsContext2D();
                 Pruebas.Prueba5(Integer.parseInt(tamano.getText())).dibujar(gc);
                 lista.getItems().clear();
-                lista.getItems().addAll(Pruebas.Prueba4(Integer.parseInt(tamano.getText()),Integer.parseInt(inicio.getText()),Integer.parseInt(fin.getText())));
+                lista.getItems().addAll(Pruebas.Prueba4(Integer.parseInt(tamano.getText()),Integer.parseInt(inicio.getText()),Integer.parseInt(fin.getText()),lista));
                 lista.setCellFactory(new CaminoCellFactory());
             }
         });   }

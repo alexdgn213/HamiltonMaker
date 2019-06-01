@@ -1,9 +1,11 @@
 package com.hamiltonmaker.Comun.Entidades;
 
+import com.hamiltonmaker.Comun.AlgoritmoGenetico.AlgotirmoGenetico;
+import com.hamiltonmaker.Comun.AlgoritmoGenetico.Individuo;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ListView;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class Pruebas {
 
@@ -102,12 +104,17 @@ public class Pruebas {
 
     }
 
-    public static ArrayList<CaminoHamiltoniano> Prueba4(int tamano, int inicio, int fin) {
+    public static ArrayList<CaminoHamiltoniano> Prueba4(int tamano, int inicio, int fin, ListView<CaminoHamiltoniano> lista) {
        Tablero tablero = new Tablero();
        tablero.generar(tamano);
        ArrayList<CaminoHamiltoniano> caminos = tablero.depthFirst(inicio,fin);
        ArrayList<CaminoHamiltoniano> caminosInt = new ArrayList<CaminoHamiltoniano>();
-       if(caminos.size()>0) caminosInt = CaminoHamiltoniano.intersectar(caminos.get(0),caminos);
+       if(caminos.size()>0){
+           caminosInt = CaminoHamiltoniano.intersectar(caminos.get(0),caminos);
+           new Thread(new AlgotirmoGenetico(caminos.get(0),caminosInt,lista)).start();
+           System.out.println("Comprobar:"+caminos.size()+" "+ caminosInt.size());
+           return caminosInt;
+       }
        return caminosInt;
     }
 

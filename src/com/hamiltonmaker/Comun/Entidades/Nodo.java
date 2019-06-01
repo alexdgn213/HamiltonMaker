@@ -68,6 +68,9 @@ public class Nodo {
         if((this.siguiente!=null) && (nodo2.siguiente!=null)){
             resultado = resultado && (this.siguiente.posX==nodo2.getSiguiente().posX) && (this.siguiente.posY==nodo2.getSiguiente().posY);
         }
+        else if((this.siguiente == null) != (nodo2.siguiente == null)){
+            resultado = false;
+        }
         return resultado;
     }
 

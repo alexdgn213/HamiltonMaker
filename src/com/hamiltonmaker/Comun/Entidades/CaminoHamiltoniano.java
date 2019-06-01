@@ -13,18 +13,20 @@ public class CaminoHamiltoniano {
     private List<Nodo> nodos; //Nodos que conforman el camino.
     private int inicio; //Posicion en la que inicia el camino
     private int fin; //Posicion en la que finaliza el camino
+    private int visibles = 0;
+    private int inhabilitados;
 
     public CaminoHamiltoniano() {
         this.nodos = new ArrayList<Nodo>();
     }
 
-    public CaminoHamiltoniano(ArrayList<Nodo> nodos, LinkedList<Nodo> orden, int inicio, int fin) {
+    public CaminoHamiltoniano(ArrayList<Nodo> nodos, LinkedList<Nodo> orden, int inicio, int fin, int inhabilitados) {
         this.inicio = inicio;
         this.fin = fin;
+        this.inhabilitados = inhabilitados;
         this.nodos = new ArrayList<Nodo>();
         for(Nodo nodo: nodos){
-            if(nodo!=null) this.nodos.add(nodo.clonar());
-            else this.nodos.add(null);
+            addNodo(nodo.clonar());
         }
         int pos;
         int posSiguiente;
@@ -41,8 +43,7 @@ public class CaminoHamiltoniano {
         this.fin = fin;
         this.nodos = new ArrayList<Nodo>();
         for(Nodo nodo: nodos){
-            if(nodo!=null) this.nodos.add(nodo.clonar());
-            else this.nodos.add(null);
+            addNodo(nodo.clonar());
         }
     }
 
@@ -56,6 +57,7 @@ public class CaminoHamiltoniano {
 
     public void addNodo(Nodo nodo) {
         this.nodos.add(nodo);
+        if (nodo.isVisible() && nodo.isHabilitado()) visibles++;
     }
 
     public int getInicio() {
@@ -74,6 +76,22 @@ public class CaminoHamiltoniano {
         this.fin = fin;
     }
 
+    public int getVisibles() {
+        return visibles;
+    }
+
+    public void setVisibles(int visibles) {
+        this.visibles = visibles;
+    }
+
+    public int getInhabilitados() {
+        return inhabilitados;
+    }
+
+    public void setInhabilitados(int inhabilitados) {
+        this.inhabilitados = inhabilitados;
+    }
+
     public void dibujar(GraphicsContext gc){
         double x = gc.getCanvas().getWidth();
         double y = gc.getCanvas().getHeight();
@@ -87,10 +105,12 @@ public class CaminoHamiltoniano {
                     gc.setStroke(Color.BLUE);
                     gc.strokeLine(move(n.getPosX(),x), move(n.getPosY(),y), move(n.getSiguiente().getPosX(),x), move(n.getSiguiente().getPosY(),y));
                 }
+                /*
                 else if(n.getSiguiente()!=null && !n.isVisible()){
                     gc.setStroke(Color.GRAY);
                     gc.strokeLine(move(n.getPosX(),x), move(n.getPosY(),y), move(n.getSiguiente().getPosX(),x), move(n.getSiguiente().getPosY(),y));
                 }
+                 */
             }
 
         }
@@ -134,8 +154,9 @@ public class CaminoHamiltoniano {
         CaminoHamiltoniano nuevoCamino = new CaminoHamiltoniano();
         nuevoCamino.fin = this.fin;
         nuevoCamino.inicio = this.inicio;
+        nuevoCamino.inhabilitados = this.inhabilitados;
         for(Nodo n: this.nodos){
-            nuevoCamino.nodos.add(n.clonar());
+            nuevoCamino.addNodo(n.clonar());
         }
         for(int i =0; i<nuevoCamino.nodos.size();i++){
             if(this.nodos.get(i).getSiguiente()!=null)
@@ -181,17 +202,68 @@ public class CaminoHamiltoniano {
         return contenido;
     }
 
+    public boolean contieneCromosoma(CaminoHamiltoniano camino){
+        boolean contenido = true;
+        for(int i=0; i<this.nodos.size() && contenido; i++){
+            if(camino.getNodos().get(i).isVisible() && camino.getNodos().get(i).isHabilitado()){
+                if(this.getNodos().get(i).isVisible()){
+                    contenido = this.getNodos().get(i).compararSiguiente(camino.getNodos().get(i));
+                }
+                else{
+                    contenido = false;
+                }
+            }
+
+        }
+        return contenido;
+    }
+
     public boolean comparar(CaminoHamiltoniano camino){
         boolean igual = true;
         if(this.inicio!=camino.inicio || this.fin!=camino.fin)
             igual = false;
+        for(int i=0; i<this.nodos.size() && igual; i++){
+            igual = this.nodos.get(i).compararSiguiente(camino.nodos.get(i));
+        }
+        return igual;
+    }
+
+    public boolean compararCromosoma(CaminoHamiltoniano camino){
+        boolean igual = true;
         for(int i=0; i<this.nodos.size() && igual; i++){{
-             if(!this.nodos.get(i).compararSiguiente(camino.nodos.get(i)) ||
-                     (this.nodos.get(i).getSiguiente()==null ^ camino.nodos.get(i).getSiguiente()==null))
-                 igual = false;
+            if(this.getNodos().get(i).isVisible()!=camino.getNodos().get(i).isVisible())
+                igual = false;
             }
         }
         return igual;
+    }
+
+
+    public void alterarNodo(int posicion){
+        if(nodos.get(posicion).isHabilitado() && (nodos.get(posicion).getSiguiente()!=null)){
+            if(nodos.get(posicion).isVisible()){
+                nodos.get(posicion).setVisible(false);
+                visibles--;
+            }
+            else {
+                nodos.get(posicion).setVisible(true);
+                visibles++;
+            }
+        }
+    }
+
+    public void alterarNodo(int posicion, CaminoHamiltoniano padre){
+        if(nodos.get(posicion).isVisible()!=padre.getNodos().get(posicion).isVisible()){
+            alterarNodo(posicion);
+        }
+    }
+
+    public static void agregarALista(ArrayList<CaminoHamiltoniano> lista, CaminoHamiltoniano camino){
+        for( CaminoHamiltoniano c : lista)
+            if(c.compararCromosoma(camino)){
+                return;
+            }
+        lista.add(camino.clonar());
     }
 
     @Override

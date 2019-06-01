@@ -42,7 +42,6 @@ public class Tablero {
             nodos.get(47).setHabilitado(false);
             nodos.get(40).setHabilitado(false);
             nodos.get(41).setHabilitado(false);
-            //nodos.get(32).setHabilitado(false);
             this.inhabilitados=8;
         }
 
@@ -116,12 +115,14 @@ public class Tablero {
 
     //Algoritmo DFS para hallar todos los caminos con mismo origen y fin
     public ArrayList<CaminoHamiltoniano> depthFirst(int inicio, int fin){
+        long st = System.currentTimeMillis();
         this.inicio= inicio;
         this.fin = fin;
         ArrayList<CaminoHamiltoniano> caminos = new ArrayList<CaminoHamiltoniano>();
         LinkedList<Nodo> visited = new LinkedList();
         visited.add(this.nodos.get(inicio));
         depthFirst(visited,this.nodos.get(fin),caminos);
+        System.out.println("Tiempo empleado en cacular caminos: "+ (System.currentTimeMillis()-st));
         return caminos;
     }
 
@@ -131,14 +132,8 @@ public class Tablero {
 
     public void agregarCamino(LinkedList<Nodo> visited,ArrayList<CaminoHamiltoniano>caminos) {
         if(visited.size()==(size*size)-inhabilitados){
-            for (Nodo node : visited) {
-                System.out.print(node.getPosX()+","+node.getPosY());
-                System.out.print(" ");
-            }
-            CaminoHamiltoniano cam = new CaminoHamiltoniano(this.nodos,visited,this.inicio,this.fin);
+            CaminoHamiltoniano cam = new CaminoHamiltoniano(this.nodos,visited,this.inicio,this.fin,this.inhabilitados);
             caminos.add(cam);
-            System.out.println(cam.toString());
-            System.out.println();
         }
     }
 }
