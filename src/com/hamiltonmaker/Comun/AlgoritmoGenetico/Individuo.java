@@ -102,12 +102,12 @@ public class Individuo {
     public void funcionDeMutacion(){
         int posicion = (int) (Math.random()*(caminoHamiltoniano.getNodos().size()-1));
         if(caminoHamiltoniano.getNodos().get(posicion).isHabilitado()){
-            System.out.print(" en el gen "+posicion);
+            //System.out.print(" en el gen "+posicion);
             caminoHamiltoniano.alterarNodo(posicion);
         }
     }
 
-    public void imprimir(int num){
+    public String imprimir(int num){
         String cromosoma = " ";
         for(Nodo n : caminoHamiltoniano.getNodos()){
             if(n.isVisible())
@@ -117,6 +117,6 @@ public class Individuo {
         }
         String mensaje = "Individuo "+num+":\t"+cromosoma+"\t  Evaluacion: "+this.evaluacion+"\t  Fitness: "+this.fitness;
         if(solucion) mensaje += "\t *";
-        System.out.println(mensaje);
+        return mensaje;
     }
 }

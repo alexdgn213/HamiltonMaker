@@ -2,6 +2,7 @@ package com.hamiltonmaker.Comun.AlgoritmoGenetico;
 
 import com.hamiltonmaker.Comun.Entidades.CaminoHamiltoniano;
 import com.hamiltonmaker.Comun.Entidades.Nodo;
+import com.hamiltonmaker.OutputManager;
 import com.hamiltonmaker.Vistas.CaminoCellFactory;
 import javafx.application.Platform;
 import javafx.scene.control.ListView;
@@ -10,7 +11,8 @@ import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import java.util.ArrayList;
 
 public class AlgotirmoGenetico implements Runnable{
-
+    private Thread hilo;
+    private boolean activo;
     CaminoHamiltoniano camino;
     ArrayList<CaminoHamiltoniano> limitaciones;
     ArrayList<CaminoHamiltoniano> soluciones;
@@ -75,9 +77,9 @@ public class AlgotirmoGenetico implements Runnable{
             fitnessTotal += individuo.funcionFitness(limitaciones,adyacenciasDeseadas);
             evaluarSolucion(individuo);
         }
-        System.out.println();
-        System.out.println("Soluciones optimas: "+ this.solucionesOptimas.size());
-        System.out.println("Soluciones: "+ this.soluciones.size());
+        //System.out.println();
+        //System.out.println("Soluciones optimas: "+ this.solucionesOptimas.size());
+        //System.out.println("Soluciones: "+ this.soluciones.size());
     }
 
     public ArrayList<CaminoHamiltoniano> obtenerCaminos(){
@@ -89,15 +91,15 @@ public class AlgotirmoGenetico implements Runnable{
 
     public void mutarPoblacion(){
         int count = 0;
-        System.out.println();
-        System.out.println();
-        System.out.println("Mutaciones:");
+        //System.out.println();
+        //System.out.println();
+        //System.out.println("Mutaciones:");
         for(Individuo individuo: poblacion){
             count++;
             double probabilidad = Math.random();
             if(probabilidad<=cohefisienteMutacion){
-                System.out.println("");
-                System.out.print("    Mutacion del individuo: "+count);
+                //System.out.println("");
+                //System.out.print("    Mutacion del individuo: "+count);
                 individuo.funcionDeMutacion();
             }
         }
@@ -111,7 +113,7 @@ public class AlgotirmoGenetico implements Runnable{
             count ++;
             double probabilidad = ((double)individuo.fitness)/((double)this.fitnessTotal);
             if(acumulado<=ruleta && ruleta<= (acumulado+probabilidad)){
-                System.out.print(count + " ");
+                //System.out.print(count + " ");
                 return individuo;
             }
             acumulado+=probabilidad;
@@ -121,13 +123,13 @@ public class AlgotirmoGenetico implements Runnable{
 
     public void reproducirPoblacion(){
         ArrayList<Individuo> nuevaPoblacion= new ArrayList<>();
-        System.out.println();
-        System.out.println();
-        System.out.println("Cruces:");
+        //System.out.println();
+        //System.out.println();
+        //System.out.println("Cruces:");
         while(nuevaPoblacion.size()<this.poblacion.size()){
             double probabilidad = Math.random();
-            System.out.println();
-            System.out.print("    Seleccionados los individuos: ");
+            //System.out.println();
+            //System.out.print("    Seleccionados los individuos: ");
             Individuo padre1 = SeleccionarIndividuo();
             Individuo padre2 = SeleccionarIndividuo();
             while(padre1==padre2){
@@ -136,7 +138,7 @@ public class AlgotirmoGenetico implements Runnable{
             Individuo hijo1 = new Individuo();
             Individuo hijo2 = new Individuo();
             if(probabilidad<=cohefisienteCruce){
-                System.out.print("y cruzados");
+                //System.out.print("y cruzados");
                 Individuo.funcionDeCruce(padre1,padre2,hijo1,hijo2);
             }
             else{
@@ -160,16 +162,14 @@ public class AlgotirmoGenetico implements Runnable{
         }
     }
 
-    public void imprimirPoblacion(int numero){
-        System.out.println();
-        System.out.println();
-        System.out.println("--------------------------- Poblacion "+numero+" -----------------------------");
-        System.out.println();
-        int num=0;
-        for(Individuo i: poblacion){
-            num++;
-            i.imprimir(num);
-        }
+    public void start() {
+        hilo = new Thread(this);
+        activo = true;
+        hilo.start();
+    }
+
+    public void stop(){
+        activo= false;
     }
 
     @Override
@@ -177,26 +177,38 @@ public class AlgotirmoGenetico implements Runnable{
         generarPoblacionInicial();
         adyacenciasDeseadas =10;
         int i= 0;
-        //Thread t = new Thread(new Dibujante());
-        //t.start();
-        while(i<10000){
+        Dibujante dibujante = new Dibujante();
+        dibujante.start();
+        while(i<1000){
             calcularFitness();
-            imprimirPoblacion(i);
+            OutputManager.imprimirPoblacion(i,this.poblacion);
             reproducirPoblacion();
             mutarPoblacion();
             i++;
         }
-        //t.interrupt();
-        imprimirPoblacion(i);
+        dibujante.stop();
+        OutputManager.imprimirPoblacion(i,this.poblacion);;
     }
 
     class Dibujante implements Runnable{
+        private Thread hilo;
+        private boolean activo;
+
+        public void start() {
+            hilo = new Thread(this);
+            activo = true;
+            hilo.start();
+        }
+
+        public void stop(){
+            activo= false;
+        }
 
         @Override
         public void run() {
-            while(true){
+            while(activo){
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(1000);
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
@@ -206,7 +218,7 @@ public class AlgotirmoGenetico implements Runnable{
                         }
                     });
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+
                 }
             }
 

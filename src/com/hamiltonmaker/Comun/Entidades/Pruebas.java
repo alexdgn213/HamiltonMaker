@@ -2,6 +2,7 @@ package com.hamiltonmaker.Comun.Entidades;
 
 import com.hamiltonmaker.Comun.AlgoritmoGenetico.AlgotirmoGenetico;
 import com.hamiltonmaker.Comun.AlgoritmoGenetico.Individuo;
+import com.hamiltonmaker.Persistencia.DAOCamino;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ListView;
 
@@ -111,9 +112,9 @@ public class Pruebas {
        ArrayList<CaminoHamiltoniano> caminosInt = new ArrayList<CaminoHamiltoniano>();
        if(caminos.size()>0){
            caminosInt = CaminoHamiltoniano.intersectar(caminos.get(0),caminos);
-           new Thread(new AlgotirmoGenetico(caminos.get(0),caminosInt,lista)).start();
-           System.out.println("Comprobar:"+caminos.size()+" "+ caminosInt.size());
-           return caminosInt;
+           AlgotirmoGenetico algotirmoGenetico = new AlgotirmoGenetico(caminos.get(0),caminosInt,lista);
+           //algotirmoGenetico.start();
+           return DAOCamino.obtenerCaminos(4,0,12);
        }
        return caminosInt;
     }

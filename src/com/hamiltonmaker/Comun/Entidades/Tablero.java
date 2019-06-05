@@ -1,4 +1,8 @@
 package com.hamiltonmaker.Comun.Entidades;
+import com.hamiltonmaker.OutputManager;
+import com.hamiltonmaker.Persistencia.DAOCamino;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 
@@ -10,7 +14,12 @@ public class Tablero {
     private int fin;
     private int inhabilitados;
 
+
     public Tablero() {
+    }
+
+    public Tablero(int size) {
+        generar(size);
     }
 
     public void generar(int size){
@@ -122,7 +131,7 @@ public class Tablero {
         LinkedList<Nodo> visited = new LinkedList();
         visited.add(this.nodos.get(inicio));
         depthFirst(visited,this.nodos.get(fin),caminos);
-        System.out.println("Tiempo empleado en cacular caminos: "+ (System.currentTimeMillis()-st));
+        OutputManager.imprimirTiempo("Tiempo empleado en cacular caminos: "+ (System.currentTimeMillis()-st));
         return caminos;
     }
 
@@ -130,9 +139,15 @@ public class Tablero {
         return new CaminoHamiltoniano(this.nodos,this.inicio, this.fin);
     }
 
+    public CaminoHamiltoniano getCaminoVacio(){
+        return new CaminoHamiltoniano(this.nodos,this.inicio, this.fin,this.inhabilitados);
+    }
+
+
     public void agregarCamino(LinkedList<Nodo> visited,ArrayList<CaminoHamiltoniano>caminos) {
         if(visited.size()==(size*size)-inhabilitados){
             CaminoHamiltoniano cam = new CaminoHamiltoniano(this.nodos,visited,this.inicio,this.fin,this.inhabilitados);
+            DAOCamino.saveCamino(cam);
             caminos.add(cam);
         }
     }

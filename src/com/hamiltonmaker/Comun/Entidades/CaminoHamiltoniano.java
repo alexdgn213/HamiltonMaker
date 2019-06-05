@@ -10,6 +10,7 @@ import java.util.List;
 import java.lang.Math;
 
 public class CaminoHamiltoniano {
+    private int id;
     private List<Nodo> nodos; //Nodos que conforman el camino.
     private int inicio; //Posicion en la que inicia el camino
     private int fin; //Posicion en la que finaliza el camino
@@ -45,6 +46,24 @@ public class CaminoHamiltoniano {
         for(Nodo nodo: nodos){
             addNodo(nodo.clonar());
         }
+    }
+
+    public CaminoHamiltoniano(ArrayList<Nodo> nodos, int inicio, int fin, int inhabilitados) {
+        this.inicio = inicio;
+        this.fin = fin;
+        this.inhabilitados = inhabilitados;
+        this.nodos = new ArrayList<Nodo>();
+        for(Nodo nodo: nodos){
+            addNodo(nodo.clonar());
+        }
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public List<Nodo> getNodos() {
@@ -152,6 +171,7 @@ public class CaminoHamiltoniano {
 
     public CaminoHamiltoniano clonar(){
         CaminoHamiltoniano nuevoCamino = new CaminoHamiltoniano();
+        nuevoCamino.id = this.id;
         nuevoCamino.fin = this.fin;
         nuevoCamino.inicio = this.inicio;
         nuevoCamino.inhabilitados = this.inhabilitados;
