@@ -6,7 +6,9 @@ import com.hamiltonmaker.Comun.Entidades.Nodo;
 import com.hamiltonmaker.Comun.Entidades.Tablero;
 import com.hamiltonmaker.Main;
 import com.hamiltonmaker.Persistencia.DAOCamino;
+import com.hamiltonmaker.Persistencia.DAOSolucion;
 import com.hamiltonmaker.Vistas.CaminoCellFactory;
+import com.hamiltonmaker.Vistas.CaminoDobleCellFactory;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -15,12 +17,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ControladorAlgoritmo {
+public class ControladorSoluciones {
 
     @FXML
     ComboBox size;
@@ -66,6 +69,7 @@ public class ControladorAlgoritmo {
         iniciar.setDisable(true);
         adyacencias.setDisable(true);
         listaCaminos.setCellFactory(new CaminoCellFactory());
+        listaSoluciones.setCellFactory(new CaminoDobleCellFactory());
 
         size.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -102,10 +106,10 @@ public class ControladorAlgoritmo {
             }
         });
 
-        iniciar.setOnAction(new EventHandler<ActionEvent>() {
+        listaCaminos.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(ActionEvent event) {
-               iniciar();
+            public void handle(MouseEvent event) {
+                buscarSoluciones();
             }
         });
 
@@ -183,7 +187,7 @@ public class ControladorAlgoritmo {
     }
 
     private void buscar(){
-        caminos = DAOCamino.obtenerCaminos((int) size.getValue(), (int)inicio.getValue(), (int) fin.getValue());
+        caminos = DAOCamino.obtenerCaminosConSolucion((int) size.getValue(), (int)inicio.getValue(), (int) fin.getValue());
         if(caminos.size()>0){
             listaCaminos.getItems().clear();
             listaCaminos.getItems().addAll(caminos);
@@ -191,24 +195,27 @@ public class ControladorAlgoritmo {
         }
     }
 
-    private void iniciar(){
-        if(!iniciado){
-            iniciado=true;
-            iniciar.setText("Detener");
-            CaminoHamiltoniano caminoHamiltoniano = listaCaminos.getSelectionModel().getSelectedItem();
-            if(caminoHamiltoniano!=null){
-                ArrayList<CaminoHamiltoniano> caminosInt = CaminoHamiltoniano.intersectar(caminoHamiltoniano,caminos);
-                algotirmoGenetico = new AlgotirmoGenetico(caminoHamiltoniano,caminosInt,listaSoluciones,1+(int) adyacencias.getValue(),numPoblacion,numSolucionesOptimas);
-                algotirmoGenetico.start();
-            }
-        } else{
-            iniciar.setText("Iniciar");
-            algotirmoGenetico.stop();
-            iniciado=false;
+    private void buscarSoluciones(){
+        ArrayList<CaminoHamiltoniano> soluciones = new ArrayList<>();
+        CaminoHamiltoniano caminoHamiltoniano = listaCaminos.getSelectionModel().getSelectedItem();
+        if(caminoHamiltoniano!=null){
+            soluciones = DAOSolucion.obtenerSoluciones(caminoHamiltoniano,(int) adyacencias.getValue()+1);
         }
-
-
-
+        this.numSolucionesOptimas.setText(String.valueOf(soluciones.size()));
+        if(soluciones.size()>0){
+            ArrayList<CaminoHamiltoniano[]> caminosDoble = new ArrayList<>();
+            for(int i = 0; i< soluciones.size(); i+=2){
+                CaminoHamiltoniano[] dupla;
+                if(i+1<soluciones.size()){
+                    dupla = new CaminoHamiltoniano[]{soluciones.get(i), soluciones.get(i + 1)};
+                }else {
+                    dupla = new CaminoHamiltoniano[]{soluciones.get(i)};
+                }
+                caminosDoble.add(dupla);
+            }
+            listaSoluciones.getItems().clear();
+            listaSoluciones.getItems().addAll(caminosDoble);
+        }
     }
 
     private void volver(){

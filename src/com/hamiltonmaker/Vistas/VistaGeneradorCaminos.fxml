@@ -18,7 +18,7 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="316.0" prefHeight="398.0" prefWidth="266.0">
                <children>
-                  <Canvas fx:id="tableroVacio" height="350.0" layoutY="167.0" width="350.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                  <Canvas fx:id="tableroVacio" height="300.0" layoutX="37.0" layoutY="334.0" width="300.0" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="37.0" AnchorPane.rightAnchor="36.0" />
                   <Label alignment="CENTER" layoutX="8.0" layoutY="14.0" text="Datos del tablero" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="16.0">
                      <font>
                         <Font name="System Bold" size="16.0" />
@@ -52,7 +52,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <ListView fx:id="listaCaminos" layoutX="14.0" layoutY="27.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="64.0" />
+                  <ListView fx:id="listaCaminos" layoutX="14.0" layoutY="27.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="64.0" />
                   <Button fx:id="volver" layoutX="310.0" layoutY="16.0" mnemonicParsing="false" text="X" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="8.0" />
                </children></AnchorPane>
         </items>

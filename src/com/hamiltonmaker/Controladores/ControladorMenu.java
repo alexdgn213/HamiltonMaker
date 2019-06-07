@@ -18,6 +18,8 @@ public class ControladorMenu {
     Button generador;
     @FXML
     Button algoritmo;
+    @FXML
+    Button soluciones;
 
     @FXML
     private void initialize() {
@@ -35,6 +37,12 @@ public class ControladorMenu {
 
             }
         });
+        soluciones.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                abrirSoluciones();
+            }
+        });
     }
 
     private void abrirGenerador(){
@@ -49,6 +57,15 @@ public class ControladorMenu {
     private void abrirAlgoritmo(){
         try {
             AnchorPane nuevoContenedor = FXMLLoader.load(Main.class.getResource("Vistas/VistaAlgoritmo.fxml"));
+            contenedor.getChildren().setAll(nuevoContenedor);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void abrirSoluciones(){
+        try {
+            AnchorPane nuevoContenedor = FXMLLoader.load(Main.class.getResource("Vistas/VistaSoluciones.fxml"));
             contenedor.getChildren().setAll(nuevoContenedor);
         } catch (IOException e) {
             e.printStackTrace();

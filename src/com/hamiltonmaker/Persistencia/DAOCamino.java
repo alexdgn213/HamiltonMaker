@@ -28,13 +28,31 @@ public class DAOCamino {
             preparedStatement.setString(4,recorrido);
             preparedStatement.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
     public static ArrayList<CaminoHamiltoniano> obtenerCaminos(int size,int inicio, int fin){
         ArrayList<CaminoHamiltoniano> caminos = new ArrayList<CaminoHamiltoniano>();
         String query = "Select * from camino where ca_size=? and ca_inicio=? and ca_fin=?";
+        try {
+            PreparedStatement preparedStatement = ConexionSQL.getPreparedStatement(query);
+            preparedStatement.setInt(1,size);
+            preparedStatement.setInt(2,inicio);
+            preparedStatement.setInt(3,fin);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                caminos.add(mapperCamino(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return caminos;
+    }
+
+    public static ArrayList<CaminoHamiltoniano> obtenerCaminosConSolucion(int size,int inicio, int fin){
+        ArrayList<CaminoHamiltoniano> caminos = new ArrayList<CaminoHamiltoniano>();
+        String query = "select distinct ca_id,ca_inicio,ca_size,ca_fin,ca_recorrido from camino,solucion where ca_id=so_camino and ca_size=? and ca_inicio = ? and ca_fin = ?";
         try {
             PreparedStatement preparedStatement = ConexionSQL.getPreparedStatement(query);
             preparedStatement.setInt(1,size);

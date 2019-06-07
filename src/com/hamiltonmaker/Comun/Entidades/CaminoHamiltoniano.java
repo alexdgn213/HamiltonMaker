@@ -112,60 +112,32 @@ public class CaminoHamiltoniano {
     }
 
     public void dibujar(GraphicsContext gc){
-        double x = gc.getCanvas().getWidth();
-        double y = gc.getCanvas().getHeight();
-        gc.clearRect(0, 0, x, y);
-        gc.setFill(Color.GREEN);
-        gc.setStroke(Color.BLUE);
-        gc.setLineWidth(5);
-        for(Nodo n:this.nodos){
-            if(n!=null){
-                if(n.getSiguiente()!=null && n.isVisible()){
-                    gc.setStroke(Color.BLUE);
-                    gc.strokeLine(move(n.getPosX(),x), move(n.getPosY(),y), move(n.getSiguiente().getPosX(),x), move(n.getSiguiente().getPosY(),y));
-                }
-            }
-
-        }
-        int i = 0;
-        for(Nodo n:this.nodos){
-            if(n!=null){
-                if(n.isHabilitado()){
-                    gc.setFill(Color.GREEN);
-                    gc.setStroke(Color.BLUE);
-                    double radio =  (120 / Math.sqrt(this.nodos.size()));
-                    gc.fillOval(move(n.getPosX(),x)-radio/2, move(n.getPosY(),y)-radio/2, radio, radio);
-                    gc.strokeOval(move(n.getPosX(),x)-radio/2, move(n.getPosY(),y)-radio/2, radio+1, radio+1);
-
-                    if(i==this.inicio) {
-                        final Image image = new Image("/images/i_play.png");
-                        gc.drawImage(image,move(n.getPosX(),x)-radio/2+2.5, move(n.getPosY(),y)-radio/2+2.5, radio-5, radio-5);
-                    }
-                    if(i==this.fin) {
-                        final Image image = new Image("/images/i_pause.png");
-                        gc.drawImage(image,move(n.getPosX(),x)-radio/2+2.5, move(n.getPosY(),y)-radio/2+2.5, radio-5, radio-5);
-                    }
-                }
-                else{
-                    gc.setFill(Color.GRAY);
-                    gc.setStroke(Color.GRAY);
-                    double radio =   200 / Math.sqrt(this.nodos.size());
-                    gc.fillRect(move(n.getPosX(),x)-radio/2, move(n.getPosY(),y)-radio/2, radio, radio);
-                    gc.strokeRect(move(n.getPosX(),x)-radio/2, move(n.getPosY(),y)-radio/2, radio, radio);
-                }
-
-            }
-            i++;
-        }
+        dibujar(gc,1,0);
     }
 
     public void dibujarDos(GraphicsContext gc, int pos){
         double x = gc.getCanvas().getWidth()/2;
-        double y = gc.getCanvas().getHeight();
         double offset = 0;
         if(pos%2!=0){
             offset = x;
         }
+        dibujar(gc,2,offset);
+    }
+
+    public void dibujarTres(GraphicsContext gc, int pos){
+        double x = gc.getCanvas().getWidth()/3;
+        double offset = 0;
+        if(pos%2!=0){
+            offset = x;
+        } else if(pos%3!=0){
+            offset = 2*x;
+        }
+        dibujar(gc,3,offset);
+    }
+
+    public void dibujar(GraphicsContext gc,int columnas, double offset){
+        double x = gc.getCanvas().getWidth()/columnas;
+        double y = gc.getCanvas().getHeight();
         gc.clearRect(offset, 0, x, y);
         gc.setFill(Color.GREEN);
         gc.setStroke(Color.BLUE);
@@ -182,10 +154,10 @@ public class CaminoHamiltoniano {
         int i = 0;
         for(Nodo n:this.nodos){
             if(n!=null){
+                double radio =  (x /(Math.sqrt(this.nodos.size())*2) );
                 if(n.isHabilitado()){
                     gc.setFill(Color.GREEN);
                     gc.setStroke(Color.BLUE);
-                    double radio =  (120 / Math.sqrt(this.nodos.size()));
                     gc.fillOval(move(n.getPosX(),x,offset)-radio/2, move(n.getPosY(),y)-radio/2, radio, radio);
                     gc.strokeOval(move(n.getPosX(),x,offset)-radio/2, move(n.getPosY(),y)-radio/2, radio+1, radio+1);
 
@@ -201,7 +173,7 @@ public class CaminoHamiltoniano {
                 else{
                     gc.setFill(Color.GRAY);
                     gc.setStroke(Color.GRAY);
-                    double radio =   200 / Math.sqrt(this.nodos.size());
+                    radio =  radio*1.5;
                     gc.fillRect(move(n.getPosX(),x,offset)-radio/2, move(n.getPosY(),y)-radio/2, radio, radio);
                     gc.strokeRect(move(n.getPosX(),x,offset)-radio/2, move(n.getPosY(),y)-radio/2, radio, radio);
                 }
@@ -209,8 +181,7 @@ public class CaminoHamiltoniano {
             i++;
         }
     }
-
-        public double move(int pos, double max){
+    public double move(int pos, double max){
         return pos*(max / (Math.sqrt(this.nodos.size())+1)) + max / (Math.sqrt(this.nodos.size())+1);
     }
 

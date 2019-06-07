@@ -1,12 +1,10 @@
 package com.hamiltonmaker.Comun.AlgoritmoGenetico;
 
 import com.hamiltonmaker.Comun.Entidades.CaminoHamiltoniano;
-import com.hamiltonmaker.OutputManager;
+import com.hamiltonmaker.Comun.Utils.OutputManager;
 import com.hamiltonmaker.Persistencia.DAOSolucion;
-import com.hamiltonmaker.Vistas.CaminoCellFactory;
 import com.hamiltonmaker.Vistas.CaminoDobleCellFactory;
 import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 
@@ -27,6 +25,7 @@ public class AlgotirmoGenetico implements Runnable{
     ListView<CaminoHamiltoniano[]> lista;
     Label lPoblacion;
     Label lSolucionesOptimas;
+    boolean pausado = false;
 
     public AlgotirmoGenetico(CaminoHamiltoniano camino, ArrayList<CaminoHamiltoniano> limitaciones, ListView<CaminoHamiltoniano[]>lista, int adyacenciasDeseadas, Label lPoblacion, Label lSolucionesOptimas) {
         this.camino = camino;
@@ -185,6 +184,14 @@ public class AlgotirmoGenetico implements Runnable{
         activo= false;
     }
 
+    public void pausar(){
+        pausado= true;
+    }
+
+    public void renaudar(){
+        pausado= false;
+    }
+
     @Override
     public void run() {
         generarPoblacionInicial();
@@ -192,12 +199,14 @@ public class AlgotirmoGenetico implements Runnable{
         Dibujante dibujante = new Dibujante();
         dibujante.start();
         while(activo){
-            calcularFitness();
-            OutputManager.imprimirPoblacion(i,this.poblacion);
-            reproducirPoblacion();
-            mutarPoblacion();
-            i++;
-            numPoblacion++;
+            if(!pausado){
+                calcularFitness();
+                OutputManager.imprimirPoblacion(i,this.poblacion);
+                reproducirPoblacion();
+                mutarPoblacion();
+                i++;
+                numPoblacion++;
+            }
         }
         dibujante.stop();
         OutputManager.imprimirPoblacion(i,this.poblacion);

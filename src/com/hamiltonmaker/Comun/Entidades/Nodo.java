@@ -1,8 +1,5 @@
 package com.hamiltonmaker.Comun.Entidades;
 
-import java.util.ArrayList;
-import java.util.List;
-
 // Clase que representa un nodo en un camino hamiltoniano
 public class Nodo {
     private int posX; //Indica la posicion X del nodo en el espacio.

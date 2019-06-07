@@ -1,5 +1,6 @@
 package com.hamiltonmaker.Comun.Entidades;
-import com.hamiltonmaker.OutputManager;
+
+import com.hamiltonmaker.Comun.Utils.OutputManager;
 import com.hamiltonmaker.Persistencia.DAOCamino;
 
 import java.util.*;

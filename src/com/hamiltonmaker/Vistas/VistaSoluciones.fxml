@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="contenedor" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hamiltonmaker.Controladores.ControladorAlgoritmo">
+<AnchorPane fx:id="contenedor" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hamiltonmaker.Controladores.ControladorSoluciones">
    <children>
       <SplitPane dividerPositions="0.3762541806020067" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
@@ -62,7 +62,7 @@
                </children></AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="292.0">
                <children>
-                  <Label alignment="CENTER" text="Poblaciones" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="16.0">
+                  <Label alignment="CENTER" text="Soluciones" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="16.0">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>

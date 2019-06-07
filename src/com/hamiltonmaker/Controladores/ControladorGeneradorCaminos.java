@@ -2,26 +2,19 @@ package com.hamiltonmaker.Controladores;
 
 import com.hamiltonmaker.Comun.Entidades.CaminoHamiltoniano;
 import com.hamiltonmaker.Comun.Entidades.Nodo;
-import com.hamiltonmaker.Comun.Entidades.Pruebas;
 import com.hamiltonmaker.Comun.Entidades.Tablero;
 import com.hamiltonmaker.Main;
 import com.hamiltonmaker.Persistencia.DAOCamino;
-import com.hamiltonmaker.Vistas.CaminoCellFactory;
 import com.hamiltonmaker.Vistas.CaminoDobleCellFactory;
-import com.sun.prism.shader.Solid_TextureYV12_AlphaTest_Loader;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 import java.util.ArrayList;

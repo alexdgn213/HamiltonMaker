@@ -1,4 +1,4 @@
-package com.hamiltonmaker;
+package com.hamiltonmaker.Comun.Utils;
 
 import com.hamiltonmaker.Comun.AlgoritmoGenetico.Individuo;
 

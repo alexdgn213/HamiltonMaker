@@ -21,7 +21,7 @@ public class CaminoDobleCell extends ListCell<CaminoHamiltoniano[]> {
         }
         else
         {
-            Canvas canvas = new Canvas(600,300);
+            Canvas canvas = new Canvas(500,250);
             GraphicsContext gc = canvas.getGraphicsContext2D();
             if(item.length>0){
                 item[0].dibujarDos(gc,0);

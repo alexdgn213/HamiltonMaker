@@ -29,13 +29,13 @@ public class DAOSolucion {
             preparedStatement.setInt(3,caminoHamiltoniano.getVisibles());
             preparedStatement.execute();
         } catch (SQLException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
     }
 
     public static ArrayList<CaminoHamiltoniano> obtenerSoluciones(int size, int inicio, int fin){
         ArrayList<CaminoHamiltoniano> caminos = new ArrayList<CaminoHamiltoniano>();
-        String query = "Select * from camino,soluecion where ca_id=so_camino and ca_size=? and ca_inicio=? and ca_fin=?";
+        String query = "Select * from camino,solucion where ca_id=so_camino and ca_size=? and ca_inicio=? and ca_fin=?";
         try {
             PreparedStatement preparedStatement = ConexionSQL.getPreparedStatement(query);
             preparedStatement.setInt(1,size);
@@ -53,10 +53,27 @@ public class DAOSolucion {
 
     public static ArrayList<CaminoHamiltoniano> obtenerSoluciones(CaminoHamiltoniano caminoHamiltoniano){
         ArrayList<CaminoHamiltoniano> caminos = new ArrayList<CaminoHamiltoniano>();
-        String query = "Select * from camino,soluecion where ca_id=so_camino and so_camino=?";
+        String query = "Select * from camino,solucion where ca_id=so_camino and so_camino=?";
         try {
             PreparedStatement preparedStatement = ConexionSQL.getPreparedStatement(query);
             preparedStatement.setInt(1,caminoHamiltoniano.getId());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                caminos.add(mapperCamino(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return caminos;
+    }
+
+    public static ArrayList<CaminoHamiltoniano> obtenerSoluciones(CaminoHamiltoniano caminoHamiltoniano, int adyacencias){
+        ArrayList<CaminoHamiltoniano> caminos = new ArrayList<CaminoHamiltoniano>();
+        String query = "Select * from camino,solucion where ca_id=so_camino and so_camino=? and so_cant_visibles=?";
+        try {
+            PreparedStatement preparedStatement = ConexionSQL.getPreparedStatement(query);
+            preparedStatement.setInt(1,caminoHamiltoniano.getId());
+            preparedStatement.setInt(2,adyacencias);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 caminos.add(mapperCamino(resultSet));
@@ -92,9 +109,9 @@ public class DAOSolucion {
             int nodoSiguiente = Integer.parseInt(recorrido[i+1]);
             caminoHamiltoniano.getNodos().get(nodoActual).setSiguiente(caminoHamiltoniano.getNodos().get(nodoSiguiente));
         }
-        String[] visibles = resultSet.getString("so_visibles").split("-");
-        for(int i=0; i<visibles.length; i++){
-            int visibilidad = Integer.parseInt(recorrido[i]);
+        String visibles = resultSet.getString("so_visibles");
+        for(int i=0; i<visibles.length(); i++){
+            int visibilidad = Integer.parseInt(String.valueOf(visibles.charAt(i)));
             if(visibilidad==0)
                 caminoHamiltoniano.alterarNodo(i);
         }

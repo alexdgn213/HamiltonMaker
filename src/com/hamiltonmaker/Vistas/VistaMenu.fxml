@@ -7,5 +7,6 @@
    <children>
       <Button fx:id="generador" layoutX="148.0" layoutY="213.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="174.0" text="Generador de Caminos" />
       <Button fx:id="algoritmo" layoutX="500.0" layoutY="213.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="174.0" text="Algoritmo Genético" />
+      <Button fx:id="soluciones" layoutX="148.0" layoutY="314.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="174.0" text="Ver Soluciones" />
    </children>
 </AnchorPane>
