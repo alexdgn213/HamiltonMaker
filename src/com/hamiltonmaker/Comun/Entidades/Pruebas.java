@@ -110,10 +110,8 @@ public class Pruebas {
        tablero.generar(tamano);
        ArrayList<CaminoHamiltoniano> caminos = tablero.depthFirst(inicio,fin);
        ArrayList<CaminoHamiltoniano> caminosInt = new ArrayList<CaminoHamiltoniano>();
+       Prueba6(lista);
        if(caminos.size()>0){
-           caminosInt = CaminoHamiltoniano.intersectar(caminos.get(0),caminos);
-           AlgotirmoGenetico algotirmoGenetico = new AlgotirmoGenetico(caminos.get(0),caminosInt,lista);
-           //algotirmoGenetico.start();
            return DAOCamino.obtenerCaminos(4,0,12);
        }
        return caminosInt;
@@ -124,4 +122,14 @@ public class Pruebas {
         tablero.generar(tamano);
         return tablero.getTableroVacio();
     }
+
+    public static void Prueba6(ListView<CaminoHamiltoniano> lista) {
+        ArrayList<CaminoHamiltoniano> caminos = DAOCamino.obtenerCaminos(5,0,24);
+        ArrayList<CaminoHamiltoniano> caminosInt = CaminoHamiltoniano.intersectar(caminos.get(0),caminos);
+        //AlgotirmoGenetico algotirmoGenetico = new AlgotirmoGenetico(caminos.get(0),caminosInt,lista);
+        //algotirmoGenetico.start();
+
+    }
+
+
 }

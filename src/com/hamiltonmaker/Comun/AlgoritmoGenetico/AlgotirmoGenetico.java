@@ -1,36 +1,43 @@
 package com.hamiltonmaker.Comun.AlgoritmoGenetico;
 
 import com.hamiltonmaker.Comun.Entidades.CaminoHamiltoniano;
-import com.hamiltonmaker.Comun.Entidades.Nodo;
 import com.hamiltonmaker.OutputManager;
+import com.hamiltonmaker.Persistencia.DAOSolucion;
 import com.hamiltonmaker.Vistas.CaminoCellFactory;
+import com.hamiltonmaker.Vistas.CaminoDobleCellFactory;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 import java.util.ArrayList;
 
 public class AlgotirmoGenetico implements Runnable{
     private Thread hilo;
     private boolean activo;
+    int numPoblacion;
     CaminoHamiltoniano camino;
     ArrayList<CaminoHamiltoniano> limitaciones;
-    ArrayList<CaminoHamiltoniano> soluciones;
     ArrayList<CaminoHamiltoniano> solucionesOptimas;
     ArrayList<Individuo> poblacion;
     int adyacenciasDeseadas = 1;
     double fitnessTotal;
     double cohefisienteMutacion = 0.5;
     double cohefisienteCruce = 0.5;
-    ListView<CaminoHamiltoniano> lista;
+    ListView<CaminoHamiltoniano[]> lista;
+    Label lPoblacion;
+    Label lSolucionesOptimas;
 
-    public AlgotirmoGenetico(CaminoHamiltoniano camino, ArrayList<CaminoHamiltoniano> limitaciones, ListView<CaminoHamiltoniano>lista) {
+    public AlgotirmoGenetico(CaminoHamiltoniano camino, ArrayList<CaminoHamiltoniano> limitaciones, ListView<CaminoHamiltoniano[]>lista, int adyacenciasDeseadas, Label lPoblacion, Label lSolucionesOptimas) {
         this.camino = camino;
         this.limitaciones = limitaciones;
         this.lista = lista;
+        this.adyacenciasDeseadas = adyacenciasDeseadas;
         this.poblacion = new ArrayList<Individuo>();
         this.solucionesOptimas = new ArrayList<CaminoHamiltoniano>();
-        this.soluciones = new ArrayList<CaminoHamiltoniano>();
+        lista.setCellFactory(new CaminoDobleCellFactory());
+        this.lPoblacion = lPoblacion;
+        this.lSolucionesOptimas = lSolucionesOptimas;
     }
 
     public CaminoHamiltoniano getCamino() {
@@ -82,11 +89,21 @@ public class AlgotirmoGenetico implements Runnable{
         //System.out.println("Soluciones: "+ this.soluciones.size());
     }
 
-    public ArrayList<CaminoHamiltoniano> obtenerCaminos(){
+    public ArrayList<CaminoHamiltoniano[]> obtenerCaminos(){
         ArrayList<CaminoHamiltoniano> caminos = new ArrayList<CaminoHamiltoniano>();
         for(Individuo individuo: poblacion)
             caminos.add(individuo.caminoHamiltoniano);
-        return caminos;
+        ArrayList<CaminoHamiltoniano[]> caminosDoble = new ArrayList<>();
+        for(int i = 0; i< caminos.size(); i+=2){
+            CaminoHamiltoniano[] dupla;
+            if(i+1<caminos.size()){
+                dupla = new CaminoHamiltoniano[]{caminos.get(i), caminos.get(i + 1)};
+            }else {
+                dupla = new CaminoHamiltoniano[]{caminos.get(i)};
+            }
+            caminosDoble.add(dupla);
+        }
+        return caminosDoble;
     }
 
     public void mutarPoblacion(){
@@ -154,10 +171,6 @@ public class AlgotirmoGenetico implements Runnable{
         if(individuo.isSolucion()){
             if(individuo.evaluacion == 0){
                 CaminoHamiltoniano.agregarALista(solucionesOptimas, individuo.getCaminoHamiltoniano());
-                CaminoHamiltoniano.agregarALista(soluciones,individuo.getCaminoHamiltoniano());
-            }
-            else{
-                CaminoHamiltoniano.agregarALista(soluciones,individuo.getCaminoHamiltoniano());
             }
         }
     }
@@ -175,19 +188,22 @@ public class AlgotirmoGenetico implements Runnable{
     @Override
     public void run() {
         generarPoblacionInicial();
-        adyacenciasDeseadas =10;
         int i= 0;
         Dibujante dibujante = new Dibujante();
         dibujante.start();
-        while(i<1000){
+        while(activo){
             calcularFitness();
             OutputManager.imprimirPoblacion(i,this.poblacion);
             reproducirPoblacion();
             mutarPoblacion();
             i++;
+            numPoblacion++;
         }
         dibujante.stop();
-        OutputManager.imprimirPoblacion(i,this.poblacion);;
+        OutputManager.imprimirPoblacion(i,this.poblacion);
+        for (CaminoHamiltoniano c: solucionesOptimas){
+            DAOSolucion.saveSolucion(c);
+        }
     }
 
     class Dibujante implements Runnable{
@@ -214,7 +230,8 @@ public class AlgotirmoGenetico implements Runnable{
                         public void run() {
                             lista.getItems().clear();
                             lista.getItems().addAll(obtenerCaminos());
-                            lista.setCellFactory(new CaminoCellFactory());
+                            lPoblacion.setText(String.valueOf(numPoblacion));
+                            lSolucionesOptimas.setText(String.valueOf(solucionesOptimas.size()));
                         }
                     });
                 } catch (InterruptedException e) {

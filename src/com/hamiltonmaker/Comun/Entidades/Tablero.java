@@ -1,8 +1,6 @@
 package com.hamiltonmaker.Comun.Entidades;
 import com.hamiltonmaker.OutputManager;
 import com.hamiltonmaker.Persistencia.DAOCamino;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 
@@ -10,8 +8,8 @@ public class Tablero {
     private Map<Nodo, LinkedHashSet<Nodo>> map = new HashMap();
     private ArrayList<Nodo> nodos;
     private int size;
-    private int inicio;
-    private int fin;
+    private int inicio=-1;
+    private int fin=-1;
     private int inhabilitados;
 
 
@@ -20,6 +18,26 @@ public class Tablero {
 
     public Tablero(int size) {
         generar(size);
+    }
+
+    public int getInicio() {
+        return inicio;
+    }
+
+    public void setInicio(int inicio) {
+        this.inicio = inicio;
+    }
+
+    public int getFin() {
+        return fin;
+    }
+
+    public void setFin(int fin) {
+        this.fin = fin;
+    }
+
+    public int getInhabilitados() {
+        return inhabilitados;
     }
 
     public void generar(int size){

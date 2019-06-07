@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class OutputManager {
 
-    private static boolean activo = true;
+    private static boolean activo = false;
 
     public  static void limpiarDatos(){
         try {

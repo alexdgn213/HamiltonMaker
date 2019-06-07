@@ -4,10 +4,6 @@ import java.util.LinkedList;
 
 public class Search {
 
-    public static void main(String[] args) {
-
-    }
-
     public void depthFirst(Graph graph, LinkedList<String> visited, String END) {
         LinkedList<String> nodes = graph.adjacentNodes(visited.getLast());
         // examine adjacent nodes

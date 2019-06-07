@@ -124,12 +124,6 @@ public class CaminoHamiltoniano {
                     gc.setStroke(Color.BLUE);
                     gc.strokeLine(move(n.getPosX(),x), move(n.getPosY(),y), move(n.getSiguiente().getPosX(),x), move(n.getSiguiente().getPosY(),y));
                 }
-                /*
-                else if(n.getSiguiente()!=null && !n.isVisible()){
-                    gc.setStroke(Color.GRAY);
-                    gc.strokeLine(move(n.getPosX(),x), move(n.getPosY(),y), move(n.getSiguiente().getPosX(),x), move(n.getSiguiente().getPosY(),y));
-                }
-                 */
             }
 
         }
@@ -139,9 +133,9 @@ public class CaminoHamiltoniano {
                 if(n.isHabilitado()){
                     gc.setFill(Color.GREEN);
                     gc.setStroke(Color.BLUE);
-                    double radio =  100 / Math.sqrt(this.nodos.size());
+                    double radio =  (120 / Math.sqrt(this.nodos.size()));
                     gc.fillOval(move(n.getPosX(),x)-radio/2, move(n.getPosY(),y)-radio/2, radio, radio);
-                    gc.strokeOval(move(n.getPosX(),x)-radio/2, move(n.getPosY(),y)-radio/2, radio, radio);
+                    gc.strokeOval(move(n.getPosX(),x)-radio/2, move(n.getPosY(),y)-radio/2, radio+1, radio+1);
 
                     if(i==this.inicio) {
                         final Image image = new Image("/images/i_play.png");
@@ -165,9 +159,65 @@ public class CaminoHamiltoniano {
         }
     }
 
-    public double move(int pos, double max){
+    public void dibujarDos(GraphicsContext gc, int pos){
+        double x = gc.getCanvas().getWidth()/2;
+        double y = gc.getCanvas().getHeight();
+        double offset = 0;
+        if(pos%2!=0){
+            offset = x;
+        }
+        gc.clearRect(offset, 0, x, y);
+        gc.setFill(Color.GREEN);
+        gc.setStroke(Color.BLUE);
+        gc.setLineWidth(5);
+        for(Nodo n:this.nodos){
+            if(n!=null){
+                if(n.getSiguiente()!=null && n.isVisible()){
+                    gc.setStroke(Color.BLUE);
+                    gc.strokeLine(move(n.getPosX(),x,offset), move(n.getPosY(),y), move(n.getSiguiente().getPosX(),x,offset), move(n.getSiguiente().getPosY(),y));
+                }
+            }
+
+        }
+        int i = 0;
+        for(Nodo n:this.nodos){
+            if(n!=null){
+                if(n.isHabilitado()){
+                    gc.setFill(Color.GREEN);
+                    gc.setStroke(Color.BLUE);
+                    double radio =  (120 / Math.sqrt(this.nodos.size()));
+                    gc.fillOval(move(n.getPosX(),x,offset)-radio/2, move(n.getPosY(),y)-radio/2, radio, radio);
+                    gc.strokeOval(move(n.getPosX(),x,offset)-radio/2, move(n.getPosY(),y)-radio/2, radio+1, radio+1);
+
+                    if(i==this.inicio) {
+                        final Image image = new Image("/images/i_play.png");
+                        gc.drawImage(image,move(n.getPosX(),x,offset)-radio/2+2.5, move(n.getPosY(),y)-radio/2+2.5, radio-5, radio-5);
+                    }
+                    if(i==this.fin) {
+                        final Image image = new Image("/images/i_pause.png");
+                        gc.drawImage(image,move(n.getPosX(),x,offset)-radio/2+2.5, move(n.getPosY(),y)-radio/2+2.5, radio-5, radio-5);
+                    }
+                }
+                else{
+                    gc.setFill(Color.GRAY);
+                    gc.setStroke(Color.GRAY);
+                    double radio =   200 / Math.sqrt(this.nodos.size());
+                    gc.fillRect(move(n.getPosX(),x,offset)-radio/2, move(n.getPosY(),y)-radio/2, radio, radio);
+                    gc.strokeRect(move(n.getPosX(),x,offset)-radio/2, move(n.getPosY(),y)-radio/2, radio, radio);
+                }
+            }
+            i++;
+        }
+    }
+
+        public double move(int pos, double max){
         return pos*(max / (Math.sqrt(this.nodos.size())+1)) + max / (Math.sqrt(this.nodos.size())+1);
     }
+
+    public double move(int pos, double max, double offset){
+        return offset + move(pos, max);
+    }
+
 
     public CaminoHamiltoniano clonar(){
         CaminoHamiltoniano nuevoCamino = new CaminoHamiltoniano();
