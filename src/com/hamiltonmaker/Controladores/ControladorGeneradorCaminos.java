@@ -5,7 +5,8 @@ import com.hamiltonmaker.Comun.Entidades.Nodo;
 import com.hamiltonmaker.Comun.Entidades.Tablero;
 import com.hamiltonmaker.Main;
 import com.hamiltonmaker.Persistencia.DAOCamino;
-import com.hamiltonmaker.Vistas.CaminoDobleCellFactory;
+import com.hamiltonmaker.Vistas.Celdas.CaminoDobleCellFactory;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -14,6 +15,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -36,10 +38,13 @@ public class ControladorGeneradorCaminos {
     @FXML
     AnchorPane contenedor;
     @FXML
+    ProgressIndicator progressIndicator;
+    @FXML
     Button volver;
 
     Tablero tablero;
     CaminoHamiltoniano caminoVacio;
+    Thread hilo;
 
 
 
@@ -47,10 +52,8 @@ public class ControladorGeneradorCaminos {
     private void initialize() {
         size.getItems().clear();
         size.getItems().addAll(3,4,5,6,7);
-        inicio.setDisable(true);
-        fin.setDisable(true);
-        generar.setDisable(true);
         listaCaminos.setCellFactory(new CaminoDobleCellFactory());
+        progressIndicator.setVisible(false);
 
         size.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -86,12 +89,10 @@ public class ControladorGeneradorCaminos {
                 volver();
             }
         });
+        actualizarControles();
     }
 
     private void seleccionarSize(){
-        inicio.setDisable(true);
-        fin.setDisable(true);
-        generar.setDisable(true);
         if(size.getValue()!=null){
             tablero = new Tablero((int) size.getValue());
             caminoVacio = tablero.getTableroVacio();
@@ -104,13 +105,11 @@ public class ControladorGeneradorCaminos {
                     inicio.getItems().add(caminoVacio.getNodos().indexOf(nodo));
                 }
             }
-            inicio.setDisable(false);
+            actualizarControles();
         }
     }
 
     private void seleccionarInicio(){
-        fin.setDisable(true);
-        generar.setDisable(true);
         if(inicio.getValue()!=null){
             fin.getItems().clear();
             tablero.setFin(-1);
@@ -129,12 +128,11 @@ public class ControladorGeneradorCaminos {
             }
             caminoVacio = tablero.getCaminoVacio();
             caminoVacio.dibujar(tableroVacio.getGraphicsContext2D());
-            fin.setDisable(false);
+            actualizarControles();
         }
     }
 
     private void seleccionarFin(){
-        generar.setDisable(true);
         if(fin.getValue()!=null){
             if(!fin.getValue().equals("Seleccionar Todos")){
                 tablero.setFin((int) fin.getValue());
@@ -143,51 +141,85 @@ public class ControladorGeneradorCaminos {
             }
             caminoVacio = tablero.getCaminoVacio();
             caminoVacio.dibujar(tableroVacio.getGraphicsContext2D());
-            generar.setDisable(false);
+            actualizarControles();
         }
     }
 
     private void generar(){
-        ArrayList<CaminoHamiltoniano> caminos = new ArrayList<>();
-        if(tablero.getInicio()>=0 && tablero.getFin()>=0){
-            caminos = DAOCamino.obtenerCaminos((int) size.getValue(), (int)inicio.getValue(), (int) fin.getValue());
-        }
-        if(caminos.size()==0){
-            if(tablero.getInicio()>=0 && tablero.getFin()>=0){
-                caminos = tablero.depthFirst((int)inicio.getValue(), (int) fin.getValue());
-            } else {
-                caminos = generarTodos();
+        bloquearControles();
+        progressIndicator.setVisible(true);
+        hilo = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<CaminoHamiltoniano> caminos = new ArrayList<>();
+                if(tablero.getInicio()>=0 && tablero.getFin()>=0){
+                    caminos = DAOCamino.obtenerCaminos((int) size.getValue(), (int)inicio.getValue(), (int) fin.getValue());
+                }
+                if(caminos.size()==0){
+                    if(tablero.getInicio()>=0 && tablero.getFin()>=0){
+                        caminos = tablero.depthFirst((int)inicio.getValue(), (int) fin.getValue());
+                    } else {
+                        caminos = new ArrayList<>();
+                        for(int i = 0; i<caminoVacio.getNodos().size() ;i++){
+                            Nodo nodo = caminoVacio.getNodos().get(i);
+                            if(nodo.isHabilitado()){
+                                for(int j = 0; j<caminoVacio.getNodos().size() ;j++){
+                                    Nodo nodo2 = caminoVacio.getNodos().get(j);
+                                    if(nodo2.isHabilitado() && nodo != nodo2){
+                                        caminos.addAll(tablero.depthFirst(i,j));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                ArrayList<CaminoHamiltoniano[]> caminosDoble = new ArrayList<>();
+                for(int i = 0; i< caminos.size(); i+=2){
+                    CaminoHamiltoniano[] dupla;
+                    if(i+1<caminos.size()){
+                        dupla = new CaminoHamiltoniano[]{caminos.get(i), caminos.get(i + 1)};
+                    }else {
+                        dupla = new CaminoHamiltoniano[]{caminos.get(i)};
+                    }
+                    caminosDoble.add(dupla);
+                }
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        listaCaminos.getItems().clear();
+                        listaCaminos.getItems().addAll(caminosDoble);
+                        progressIndicator.setVisible(false);
+                        actualizarControles();
+                    }
+                });
             }
-        }
-        ArrayList<CaminoHamiltoniano[]> caminosDoble = new ArrayList<>();
-        for(int i = 0; i< caminos.size(); i+=2){
-            CaminoHamiltoniano[] dupla;
-            if(i+1<caminos.size()){
-                dupla = new CaminoHamiltoniano[]{caminos.get(i), caminos.get(i + 1)};
-            }else {
-                dupla = new CaminoHamiltoniano[]{caminos.get(i)};
-            }
-            caminosDoble.add(dupla);
-        }
-        listaCaminos.getItems().clear();
-        listaCaminos.getItems().addAll(caminosDoble);
+        });
+        hilo.start();
+
     }
 
-    private ArrayList<CaminoHamiltoniano> generarTodos(){
-        ArrayList<CaminoHamiltoniano> caminos = new ArrayList<>();
-        for(int i = 0; i<caminoVacio.getNodos().size() ;i++){
-            Nodo nodo = caminoVacio.getNodos().get(i);
-            if(nodo.isHabilitado()){
-                for(int j = 0; j<caminoVacio.getNodos().size() ;j++){
-                    Nodo nodo2 = caminoVacio.getNodos().get(j);
-                    if(nodo2.isHabilitado() && nodo != nodo2){
-                        caminos.addAll(tablero.depthFirst(i,j));
-                    }
+    private void actualizarControles(){
+        size.setDisable(false);
+        inicio.setDisable(true);
+        fin.setDisable(true);
+        generar.setDisable(true);
+        if(size.getValue()!=null){
+            inicio.setDisable(false);
+            if(inicio.getValue()!=null){
+                fin.setDisable(false);
+                if(fin.getValue()!=null){
+                    generar.setDisable(false);
                 }
             }
         }
+    }
 
-        return caminos;
+    private void bloquearControles(){
+        size.setDisable(true);
+        inicio.setDisable(true);
+        fin.setDisable(true);
+        generar.setDisable(true);
+        listaCaminos.getItems().clear();
     }
 
     private void volver(){

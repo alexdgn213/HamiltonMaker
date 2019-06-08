@@ -7,20 +7,21 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="contenedor" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hamiltonmaker.Controladores.ControladorGeneradorCaminos">
+<AnchorPane fx:id="contenedor" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hamiltonmaker.Controladores.ControladorExportar">
    <children>
       <SplitPane dividerPositions="0.3762541806020067" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="316.0" prefHeight="398.0" prefWidth="266.0">
                <children>
                   <Canvas fx:id="tableroVacio" height="300.0" layoutX="37.0" layoutY="334.0" width="300.0" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="37.0" AnchorPane.rightAnchor="36.0" />
-                  <Label alignment="CENTER" layoutX="8.0" layoutY="14.0" text="Datos del tablero" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="16.0">
+                  <Label alignment="CENTER" layoutX="8.0" layoutY="14.0" text="Datos de los caminos" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="16.0">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -34,17 +35,23 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="Tamaño" />
-                        <Label text="Inicio" GridPane.rowIndex="1" />
-                        <Label text="Fin" GridPane.rowIndex="2" />
-                        <ComboBox fx:id="size" prefWidth="150.0" GridPane.columnIndex="1" />
-                        <ComboBox fx:id="inicio" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <ComboBox fx:id="fin" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label text="Tamaño mínimo:" />
+                        <Label text="Tamaño máximo:" GridPane.rowIndex="1" />
+                        <Label text="Dificultad: " GridPane.rowIndex="2" />
+                        <ComboBox fx:id="minSize" prefWidth="150.0" GridPane.columnIndex="1" />
+                        <ComboBox fx:id="maxSize" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <ComboBox fx:id="dificultad" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label layoutX="10.0" layoutY="77.0" text="Máximo de soluciones:" GridPane.rowIndex="4" />
+                        <TextField fx:id="maxSoluciones" maxWidth="150.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label layoutX="10.0" layoutY="137.0" text="Máximo de caminos: " GridPane.rowIndex="3" />
+                        <TextField fx:id="maxCaminos" layoutX="181.0" layoutY="133.0" maxWidth="150.0" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                      </children>
                   </GridPane>
-                  <Button fx:id="generar" layoutX="107.0" layoutY="169.0" mnemonicParsing="false" text="Generar" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="220.0" />
+                  <Button fx:id="exportar" layoutX="107.0" layoutY="169.0" mnemonicParsing="false" text="Exportar" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="250.0" />
                </children></AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="292.0">
                <children>
@@ -55,7 +62,7 @@
                   </Label>
                   <ListView fx:id="listaCaminos" layoutX="14.0" layoutY="27.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="64.0" />
                   <Button fx:id="volver" layoutX="310.0" layoutY="16.0" mnemonicParsing="false" text="X" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="8.0" />
-                  <ProgressIndicator fx:id="progressIndicator" layoutX="265.0" layoutY="83.0" prefHeight="98.0" prefWidth="90.0" />
+                  <ProgressIndicator fx:id="progressIndicator" layoutX="268.0" layoutY="75.0" prefHeight="87.0" prefWidth="83.0" />
                </children></AnchorPane>
         </items>
       </SplitPane>

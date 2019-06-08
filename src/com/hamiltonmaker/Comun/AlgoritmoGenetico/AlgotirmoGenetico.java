@@ -3,7 +3,7 @@ package com.hamiltonmaker.Comun.AlgoritmoGenetico;
 import com.hamiltonmaker.Comun.Entidades.CaminoHamiltoniano;
 import com.hamiltonmaker.Comun.Utils.OutputManager;
 import com.hamiltonmaker.Persistencia.DAOSolucion;
-import com.hamiltonmaker.Vistas.CaminoDobleCellFactory;
+import com.hamiltonmaker.Vistas.Celdas.CaminoDobleCellFactory;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -77,15 +77,11 @@ public class AlgotirmoGenetico implements Runnable{
     }
 
     public void calcularFitness(){
-        long st = System.currentTimeMillis();
         fitnessTotal = 0;
         for (Individuo individuo : poblacion){
             fitnessTotal += individuo.funcionFitness(limitaciones,adyacenciasDeseadas);
             evaluarSolucion(individuo);
         }
-        //System.out.println();
-        //System.out.println("Soluciones optimas: "+ this.solucionesOptimas.size());
-        //System.out.println("Soluciones: "+ this.soluciones.size());
     }
 
     public ArrayList<CaminoHamiltoniano[]> obtenerCaminos(){
@@ -106,16 +102,9 @@ public class AlgotirmoGenetico implements Runnable{
     }
 
     public void mutarPoblacion(){
-        int count = 0;
-        //System.out.println();
-        //System.out.println();
-        //System.out.println("Mutaciones:");
         for(Individuo individuo: poblacion){
-            count++;
             double probabilidad = Math.random();
             if(probabilidad<=cohefisienteMutacion){
-                //System.out.println("");
-                //System.out.print("    Mutacion del individuo: "+count);
                 individuo.funcionDeMutacion();
             }
         }
@@ -124,12 +113,9 @@ public class AlgotirmoGenetico implements Runnable{
     public Individuo SeleccionarIndividuo(){
         double ruleta = Math.random();
         double acumulado = 0;
-        int count = 0;
         for(Individuo individuo: poblacion){
-            count ++;
             double probabilidad = ((double)individuo.fitness)/((double)this.fitnessTotal);
             if(acumulado<=ruleta && ruleta<= (acumulado+probabilidad)){
-                //System.out.print(count + " ");
                 return individuo;
             }
             acumulado+=probabilidad;
@@ -139,13 +125,8 @@ public class AlgotirmoGenetico implements Runnable{
 
     public void reproducirPoblacion(){
         ArrayList<Individuo> nuevaPoblacion= new ArrayList<>();
-        //System.out.println();
-        //System.out.println();
-        //System.out.println("Cruces:");
         while(nuevaPoblacion.size()<this.poblacion.size()){
             double probabilidad = Math.random();
-            //System.out.println();
-            //System.out.print("    Seleccionados los individuos: ");
             Individuo padre1 = SeleccionarIndividuo();
             Individuo padre2 = SeleccionarIndividuo();
             while(padre1==padre2){
@@ -154,7 +135,6 @@ public class AlgotirmoGenetico implements Runnable{
             Individuo hijo1 = new Individuo();
             Individuo hijo2 = new Individuo();
             if(probabilidad<=cohefisienteCruce){
-                //System.out.print("y cruzados");
                 Individuo.funcionDeCruce(padre1,padre2,hijo1,hijo2);
             }
             else{

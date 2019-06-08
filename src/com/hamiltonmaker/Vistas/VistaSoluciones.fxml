@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -57,8 +58,9 @@
                   </GridPane>
                   <Button fx:id="buscar" layoutX="107.0" layoutY="169.0" mnemonicParsing="false" text="Buscar" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="140.0" />
                   <ListView fx:id="listaCaminos" layoutX="87.0" layoutY="387.0" prefHeight="360.0" prefWidth="300.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="46.0" AnchorPane.rightAnchor="46.0" />
-                  <Button fx:id="iniciar" layoutX="50.0" layoutY="229.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="273.0" text="Iniciar" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
+                  <Button fx:id="seleccionar" layoutX="50.0" layoutY="229.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="273.0" text="Seleccionar" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
                   <Label layoutX="14.0" layoutY="214.0" text="Seleccionar camino:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="180.0" />
+                  <ProgressIndicator fx:id="progressIndicator" layoutX="161.0" layoutY="219.0" />
                </children></AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="292.0">
                <children>
@@ -80,16 +82,12 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="150.0" text="Población:   " textAlignment="CENTER" />
-                        <Label fx:id="numPoblacion" text="0" GridPane.columnIndex="1">
-                           <GridPane.margin>
-                              <Insets left="8.0" />
-                           </GridPane.margin>
-                        </Label>
-                        <Label text="Soluciones encontradas:" GridPane.columnIndex="2" />
-                        <Label fx:id="numSolucionesOptimas" text="0" GridPane.columnIndex="3" />
+                        <Label text="Soluciones totales:" />
+                        <Label fx:id="numSolucionesOptimas" text="0" GridPane.columnIndex="1" />
+                        <Button fx:id="exportar" mnemonicParsing="false" prefHeight="25.0" prefWidth="113.0" text="Exportar" GridPane.columnIndex="3" />
                      </children>
                   </GridPane>
+                  <ProgressIndicator fx:id="progressIndicator2" layoutX="257.0" layoutY="75.0" prefHeight="98.0" prefWidth="105.0" />
                </children></AnchorPane>
         </items>
       </SplitPane>

@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressIndicator?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -59,6 +60,7 @@
                   <ListView fx:id="listaCaminos" layoutX="87.0" layoutY="387.0" prefHeight="360.0" prefWidth="300.0" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="46.0" AnchorPane.rightAnchor="46.0" />
                   <Button fx:id="iniciar" layoutX="50.0" layoutY="229.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="273.0" text="Iniciar" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" />
                   <Label layoutX="14.0" layoutY="214.0" text="Seleccionar camino:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="180.0" />
+                  <ProgressIndicator fx:id="progressIndicator" layoutX="161.0" layoutY="216.0" />
                </children></AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="292.0">
                <children>

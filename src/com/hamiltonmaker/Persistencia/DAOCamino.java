@@ -68,11 +68,23 @@ public class DAOCamino {
         return caminos;
     }
 
-    public static ArrayList<CaminoHamiltoniano> obtenerCaminos(){
+    public static ArrayList<CaminoHamiltoniano> obtenerPorDificultad(int minSize, int maxSize, int dificultad, int cantMax){
         ArrayList<CaminoHamiltoniano> caminos = new ArrayList<CaminoHamiltoniano>();
-        String query = "Select * from camino";
+        int visibleMinimos = dificultad*10;
+        int visiblesMaximos = (dificultad+1)*10;
+        if(dificultad == 3) visiblesMaximos = 50;
+        String query = "Select * from (select distinct ca_id,ca_inicio,ca_size,ca_fin,ca_recorrido " +
+                "from camino,solucion where ca_id=so_camino and (ca_size*ca_size)-so_cant_visibles >= ? " +
+                "and (ca_size*ca_size)-so_cant_visibles < ? and ca_size>= ? and ca_size<= ?) " +
+                "as sub order by RANDOM() limit ?";
         try {
-            ResultSet resultSet = ConexionSQL.executeQuery(query);
+            PreparedStatement preparedStatement = ConexionSQL.getPreparedStatement(query);
+            preparedStatement.setInt(1,visibleMinimos);
+            preparedStatement.setInt(2,visiblesMaximos);
+            preparedStatement.setInt(3,minSize);
+            preparedStatement.setInt(4,maxSize);
+            preparedStatement.setInt(5,cantMax);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 caminos.add(mapperCamino(resultSet));
             }

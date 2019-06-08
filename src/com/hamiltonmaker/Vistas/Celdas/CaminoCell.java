@@ -1,4 +1,4 @@
-package com.hamiltonmaker.Vistas;
+package com.hamiltonmaker.Vistas.Celdas;
 
 import com.hamiltonmaker.Comun.Entidades.CaminoHamiltoniano;
 import javafx.scene.canvas.Canvas;

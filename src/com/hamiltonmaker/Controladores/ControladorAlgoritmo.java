@@ -6,15 +6,14 @@ import com.hamiltonmaker.Comun.Entidades.Nodo;
 import com.hamiltonmaker.Comun.Entidades.Tablero;
 import com.hamiltonmaker.Main;
 import com.hamiltonmaker.Persistencia.DAOCamino;
-import com.hamiltonmaker.Vistas.CaminoCellFactory;
+import com.hamiltonmaker.Vistas.Celdas.CaminoCellFactory;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -41,6 +40,8 @@ public class ControladorAlgoritmo {
     @FXML
     AnchorPane contenedor;
     @FXML
+    ProgressIndicator progressIndicator;
+    @FXML
     Button volver;
     @FXML
     Label numPoblacion;
@@ -53,6 +54,7 @@ public class ControladorAlgoritmo {
 
     boolean iniciado = false;
     AlgotirmoGenetico algotirmoGenetico;
+    Thread hilo;
 
 
 
@@ -60,12 +62,8 @@ public class ControladorAlgoritmo {
     private void initialize() {
         size.getItems().clear();
         size.getItems().addAll(3,4,5,6,7);
-        inicio.setDisable(true);
-        fin.setDisable(true);
-        buscar.setDisable(true);
-        iniciar.setDisable(true);
-        adyacencias.setDisable(true);
         listaCaminos.setCellFactory(new CaminoCellFactory());
+        progressIndicator.setVisible(false);
 
         size.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -116,13 +114,18 @@ public class ControladorAlgoritmo {
             }
         });
 
+        listaCaminos.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                actualizarControles();
+            }
+        });
+
+        actualizarControles();
+
     }
 
     private void seleccionarSize(){
-        inicio.setDisable(true);
-        fin.setDisable(true);
-        buscar.setDisable(true);
-        adyacencias.setDisable(true);
         listaCaminos.getItems().clear();
         if(size.getValue()!=null){
             tablero = new Tablero((int) size.getValue());
@@ -134,15 +137,15 @@ public class ControladorAlgoritmo {
                     inicio.getItems().add(caminoVacio.getNodos().indexOf(nodo));
                 }
             }
-            inicio.setDisable(false);
+            adyacencias.getItems().clear();
+            for(int i = 1; i<caminoVacio.getNodos().size()-tablero.getInhabilitados()-1;i++){
+                adyacencias.getItems().add(i);
+            }
+            actualizarControles();
         }
     }
 
     private void seleccionarInicio(){
-        fin.setDisable(true);
-        buscar.setDisable(true);
-        adyacencias.setDisable(true);
-        listaCaminos.getItems().clear();
         if(inicio.getValue()!=null){
             fin.getItems().clear();
             for(int i = 0; i<caminoVacio.getNodos().size() ;i++){
@@ -155,7 +158,7 @@ public class ControladorAlgoritmo {
                     fin.getItems().add(caminoVacio.getNodos().indexOf(nodo));
                 }
             }
-            fin.setDisable(false);
+            actualizarControles();
         }
     }
 
@@ -165,30 +168,37 @@ public class ControladorAlgoritmo {
         listaCaminos.getItems().clear();
         if(fin.getValue()!=null){
             tablero.setFin((int) fin.getValue());
-            adyacencias.getItems().clear();
-            caminoVacio = tablero.getCaminoVacio();
-            for(int i = 1; i<caminoVacio.getNodos().size()-tablero.getInhabilitados()-1;i++){
-                adyacencias.getItems().add(i);
-            }
-            adyacencias.setDisable(false);
+            actualizarControles();
         }
     }
 
     private void seleccionarAdyacencias(){
         buscar.setDisable(true);
-        listaCaminos.getItems().clear();
         if(adyacencias.getValue()!=null){
-            buscar.setDisable(false);
+            actualizarControles();
         }
     }
 
     private void buscar(){
-        caminos = DAOCamino.obtenerCaminos((int) size.getValue(), (int)inicio.getValue(), (int) fin.getValue());
-        if(caminos.size()>0){
-            listaCaminos.getItems().clear();
-            listaCaminos.getItems().addAll(caminos);
-            iniciar.setDisable(false);
-        }
+        bloquearControles();
+        progressIndicator.setVisible(true);
+        hilo = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                caminos = DAOCamino.obtenerCaminos((int) size.getValue(), (int)inicio.getValue(), (int) fin.getValue());
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        listaCaminos.getItems().clear();
+                        listaCaminos.getItems().addAll(caminos);
+                        progressIndicator.setVisible(false);
+                        actualizarControles();
+                    }
+                });
+            }
+        });
+        hilo.start();
+
     }
 
     private void iniciar(){
@@ -206,9 +216,38 @@ public class ControladorAlgoritmo {
             algotirmoGenetico.stop();
             iniciado=false;
         }
+    }
 
+    private void actualizarControles(){
+        size.setDisable(false);
+        inicio.setDisable(true);
+        fin.setDisable(true);
+        adyacencias.setDisable(true);
+        buscar.setDisable(true);
+        iniciar.setDisable(true);
+        if(size.getValue()!=null){
+            inicio.setDisable(false);
+            if(inicio.getValue()!=null){
+                fin.setDisable(false);
+                if(fin.getValue()!=null){
+                    buscar.setDisable(false);
+                }
+            }
+            adyacencias.setDisable(false);
+            if(adyacencias.getValue()!=null && fin.getValue()!=null && listaCaminos.getSelectionModel().getSelectedItem()!=null)
+                iniciar.setDisable(false);
+        }
+    }
 
-
+    private void bloquearControles(){
+        size.setDisable(true);
+        inicio.setDisable(true);
+        fin.setDisable(true);
+        adyacencias.setDisable(true);
+        buscar.setDisable(true);
+        iniciar.setDisable(true);
+        listaCaminos.getItems().clear();
+        listaSoluciones.getItems().clear();
     }
 
     private void volver(){

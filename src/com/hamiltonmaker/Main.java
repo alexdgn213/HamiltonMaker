@@ -26,8 +26,6 @@ public class Main extends Application {
         mostrarMenu();
     }
 
-
-
     public static void main(String[] args) {
         launch(args);
     }
@@ -42,20 +40,6 @@ public class Main extends Application {
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void mostrarGenerador() {
-        try {
-            // Load person overview.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("Vistas/VistaGeneradorCaminos.fxml"));
-            AnchorPane generador = (AnchorPane) loader.load();
-
-            // Set person overview into the center of root layout.
-            rootLayout.setCenter(generador);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -20,6 +20,8 @@ public class ControladorMenu {
     Button algoritmo;
     @FXML
     Button soluciones;
+    @FXML
+    Button exportar;
 
     @FXML
     private void initialize() {
@@ -43,6 +45,13 @@ public class ControladorMenu {
                 abrirSoluciones();
             }
         });
+        exportar.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                abrirExportar();
+            }
+        });
+
     }
 
     private void abrirGenerador(){
@@ -66,6 +75,15 @@ public class ControladorMenu {
     private void abrirSoluciones(){
         try {
             AnchorPane nuevoContenedor = FXMLLoader.load(Main.class.getResource("Vistas/VistaSoluciones.fxml"));
+            contenedor.getChildren().setAll(nuevoContenedor);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void abrirExportar(){
+        try {
+            AnchorPane nuevoContenedor = FXMLLoader.load(Main.class.getResource("Vistas/VistaExportar.fxml"));
             contenedor.getChildren().setAll(nuevoContenedor);
         } catch (IOException e) {
             e.printStackTrace();

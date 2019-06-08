@@ -33,27 +33,9 @@ public class DAOSolucion {
         }
     }
 
-    public static ArrayList<CaminoHamiltoniano> obtenerSoluciones(int size, int inicio, int fin){
-        ArrayList<CaminoHamiltoniano> caminos = new ArrayList<CaminoHamiltoniano>();
-        String query = "Select * from camino,solucion where ca_id=so_camino and ca_size=? and ca_inicio=? and ca_fin=?";
-        try {
-            PreparedStatement preparedStatement = ConexionSQL.getPreparedStatement(query);
-            preparedStatement.setInt(1,size);
-            preparedStatement.setInt(2,inicio);
-            preparedStatement.setInt(3,fin);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                caminos.add(mapperCamino(resultSet));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return caminos;
-    }
-
     public static ArrayList<CaminoHamiltoniano> obtenerSoluciones(CaminoHamiltoniano caminoHamiltoniano){
         ArrayList<CaminoHamiltoniano> caminos = new ArrayList<CaminoHamiltoniano>();
-        String query = "Select * from camino,solucion where ca_id=so_camino and so_camino=?";
+        String query = "Select * from camino,solucion where ca_id=so_camino and so_camino=? order by so_cant_visibles desc";
         try {
             PreparedStatement preparedStatement = ConexionSQL.getPreparedStatement(query);
             preparedStatement.setInt(1,caminoHamiltoniano.getId());
@@ -84,11 +66,19 @@ public class DAOSolucion {
         return caminos;
     }
 
-    public static ArrayList<CaminoHamiltoniano> obtenerSoluciones(){
+    public static ArrayList<CaminoHamiltoniano> obtenerPorDificultad(CaminoHamiltoniano caminoHamiltoniano, int dificultad, int max){
         ArrayList<CaminoHamiltoniano> caminos = new ArrayList<CaminoHamiltoniano>();
-        String query = "Select * from camino,soluecion where ca_id=sol_camino";
+        int visibleMinimos = dificultad*10;
+        int visiblesMaximos = (dificultad+1)*10;
+        if(dificultad == 3) visiblesMaximos = 50;
+        String query = "Select * from camino,solucion where ca_id=so_camino and so_camino=? and (ca_size*ca_size)-so_cant_visibles >= ? and (ca_size*ca_size)-so_cant_visibles < ? order by RANDOM() limit ?";
         try {
-            ResultSet resultSet = ConexionSQL.executeQuery(query);
+            PreparedStatement preparedStatement = ConexionSQL.getPreparedStatement(query);
+            preparedStatement.setInt(1,caminoHamiltoniano.getId());
+            preparedStatement.setInt(2,visibleMinimos);
+            preparedStatement.setInt(3,visiblesMaximos);
+            preparedStatement.setInt(4,max);
+            ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 caminos.add(mapperCamino(resultSet));
             }

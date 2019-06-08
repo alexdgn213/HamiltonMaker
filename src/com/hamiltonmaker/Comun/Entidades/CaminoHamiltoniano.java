@@ -299,6 +299,19 @@ public class CaminoHamiltoniano {
         }
     }
 
+    public String obtenerDificultad(){
+        int dificultad = this.nodos.size() - visibles;
+        if(dificultad<10){
+            return "Fácil";
+        } else if (dificultad<20){
+            return "Medio";
+        } else if (dificultad < 30){
+            return "Difícil";
+        } else {
+            return "Avanzado";
+        }
+    }
+
     public static void agregarALista(ArrayList<CaminoHamiltoniano> lista, CaminoHamiltoniano camino){
         for( CaminoHamiltoniano c : lista)
             if(c.compararCromosoma(camino)){
