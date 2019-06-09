@@ -1,9 +1,11 @@
 package com.hamiltonmaker;
 
+import com.hamiltonmaker.Comun.Utils.AlertManager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -20,6 +22,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Hamilton Maker");
+        this.primaryStage.getIcons().add(new Image(Main.class.getResourceAsStream("/recursos/imagenes/ic_icono.png")));
 
         initRootLayout();
 
@@ -42,6 +45,7 @@ public class Main extends Application {
             primaryStage.show();
         } catch (IOException e) {
             e.printStackTrace();
+            AlertManager.alertarError();
         }
     }
 
@@ -56,6 +60,7 @@ public class Main extends Application {
             rootLayout.setCenter(generador);
         } catch (IOException e) {
             e.printStackTrace();
+            AlertManager.alertarError();
         }
     }
 

@@ -16,6 +16,9 @@ public class CaminoHamiltoniano {
     private int fin; //Posicion en la que finaliza el camino
     private int visibles = 0;
     private int inhabilitados;
+    private final Color azul = Color.web("#161899");
+    private final Color verde = Color.web("#648b3f");
+    private final Color gris = Color.web("#B2B2B2");
 
     public CaminoHamiltoniano() {
         this.nodos = new ArrayList<Nodo>();
@@ -139,13 +142,13 @@ public class CaminoHamiltoniano {
         double x = gc.getCanvas().getWidth()/columnas;
         double y = gc.getCanvas().getHeight();
         gc.clearRect(offset, 0, x, y);
-        gc.setFill(Color.GREEN);
-        gc.setStroke(Color.BLUE);
+        gc.setFill(verde);
+        gc.setStroke(azul);
         gc.setLineWidth(5);
         for(Nodo n:this.nodos){
             if(n!=null){
                 if(n.getSiguiente()!=null && n.isVisible()){
-                    gc.setStroke(Color.BLUE);
+                    gc.setStroke(azul);
                     gc.strokeLine(move(n.getPosX(),x,offset), move(n.getPosY(),y), move(n.getSiguiente().getPosX(),x,offset), move(n.getSiguiente().getPosY(),y));
                 }
             }
@@ -156,23 +159,23 @@ public class CaminoHamiltoniano {
             if(n!=null){
                 double radio =  (x /(Math.sqrt(this.nodos.size())*2) );
                 if(n.isHabilitado()){
-                    gc.setFill(Color.GREEN);
-                    gc.setStroke(Color.BLUE);
+                    gc.setFill(verde);
+                    gc.setStroke(azul);
                     gc.fillOval(move(n.getPosX(),x,offset)-radio/2, move(n.getPosY(),y)-radio/2, radio, radio);
                     gc.strokeOval(move(n.getPosX(),x,offset)-radio/2, move(n.getPosY(),y)-radio/2, radio+1, radio+1);
-
+                    double proporcion = 0.7;
                     if(i==this.inicio) {
-                        final Image image = new Image("/images/i_play.png");
-                        gc.drawImage(image,move(n.getPosX(),x,offset)-radio/2+2.5, move(n.getPosY(),y)-radio/2+2.5, radio-5, radio-5);
+                        final Image image = new Image("/recursos/imagenes/ic_inicio.png");
+                        gc.drawImage(image,move(n.getPosX(),x,offset)-(radio*proporcion)/2, move(n.getPosY(),y)-(radio*proporcion)/2, radio*proporcion, radio*proporcion);
                     }
                     if(i==this.fin) {
-                        final Image image = new Image("/images/i_pause.png");
-                        gc.drawImage(image,move(n.getPosX(),x,offset)-radio/2+2.5, move(n.getPosY(),y)-radio/2+2.5, radio-5, radio-5);
+                        final Image image = new Image("/recursos/imagenes/ic_pausa.png");
+                        gc.drawImage(image,move(n.getPosX(),x,offset)-(radio*proporcion)/2, move(n.getPosY(),y)-(radio*proporcion)/2, radio*proporcion, radio*proporcion);
                     }
                 }
                 else{
-                    gc.setFill(Color.GRAY);
-                    gc.setStroke(Color.GRAY);
+                    gc.setFill(gris);
+                    gc.setStroke(gris);
                     radio =  radio*1.5;
                     gc.fillRect(move(n.getPosX(),x,offset)-radio/2, move(n.getPosY(),y)-radio/2, radio, radio);
                     gc.strokeRect(move(n.getPosX(),x,offset)-radio/2, move(n.getPosY(),y)-radio/2, radio, radio);

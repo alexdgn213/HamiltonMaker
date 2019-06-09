@@ -3,6 +3,7 @@ package com.hamiltonmaker.Controladores;
 import com.hamiltonmaker.Comun.Entidades.CaminoHamiltoniano;
 import com.hamiltonmaker.Comun.Entidades.Nodo;
 import com.hamiltonmaker.Comun.Entidades.Tablero;
+import com.hamiltonmaker.Comun.Utils.AlertManager;
 import com.hamiltonmaker.Comun.Utils.JSONManager;
 import com.hamiltonmaker.Comun.Utils.OutputManager;
 import com.hamiltonmaker.Main;
@@ -133,76 +134,77 @@ public class ControladorExportar {
     }
 
     private void exportar(){
-        progressIndicator.setVisible(true);
-        bloquearControles();
-        listaCaminos.getItems().clear();
-        archivo = OutputManager.abrirfileChooser(contenedor);
-        if(!maxCaminos.getText().matches("[0-9]*") && maxCaminos.getText().length()==0){
-            mostrarError("Valor inválido",
+        if(!maxCaminos.getText().matches("[0-9]*") || maxCaminos.getText().length()==0){
+            AlertManager.mostrarAlerta("Valor inválido",
                     "Ha ingresado un máximo de caminos hamiltonianos no válido.");
         }
-        else if(!maxSoluciones.getText().matches("[0-9]*") && maxSoluciones.getText().length()==0){
-            mostrarError("Valor inválido",
+        else if(!maxSoluciones.getText().matches("[0-9]*") || maxSoluciones.getText().length()==0){
+            AlertManager.mostrarAlerta("Valor inválido",
                     "Ha ingresado un máximo de soluciones parciales no válido.");
         }
-        hilo = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ArrayList<CaminoHamiltoniano[]> caminosDoble = new ArrayList<>();
-                if(archivo!= null && maxCaminos.getText().matches("[0-9]*") && maxSoluciones.getText().matches("[0-9]*") && maxCaminos.getText().length()>0 && maxSoluciones.getText().length()>0){
-                    int caminosMax = Integer.valueOf(maxCaminos.getText());
-                    int solucionesMax = Integer.valueOf(maxSoluciones.getText());
-                    int numDificultad = dificultad.getSelectionModel().getSelectedIndex();
-                    int sizeMin = (int) minSize.getValue();
-                    int sizeMax = (int) maxSize.getValue();
+        else{
+            bloquearControles();
+            listaCaminos.getItems().clear();
+            progressIndicator.setVisible(true);
+            archivo = OutputManager.abrirfileChooser(contenedor);
+            hilo = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    ArrayList<CaminoHamiltoniano[]> caminosDoble = new ArrayList<>();
+                    if(archivo!= null && maxCaminos.getText().matches("[0-9]*") && maxSoluciones.getText().matches("[0-9]*") && maxCaminos.getText().length()>0 && maxSoluciones.getText().length()>0){
+                        int caminosMax = Integer.valueOf(maxCaminos.getText());
+                        int solucionesMax = Integer.valueOf(maxSoluciones.getText());
+                        int numDificultad = dificultad.getSelectionModel().getSelectedIndex();
+                        int sizeMin = (int) minSize.getValue();
+                        int sizeMax = (int) maxSize.getValue();
 
-                    caminos = new ArrayList<>();
+                        caminos = new ArrayList<>();
 
-                    caminos = DAOCamino.obtenerPorDificultad(sizeMin,sizeMax,numDificultad,caminosMax);
+                        caminos = DAOCamino.obtenerPorDificultad(sizeMin,sizeMax,numDificultad,caminosMax);
 
-                    ArrayList<CaminoHamiltoniano> soluciones = new ArrayList<>();
-                    if(caminos.size()>0){
-                        JSONManager.iniciarArchivo(archivo);
-                        int totalCaminos = caminos.size();
-                        for(CaminoHamiltoniano c: caminos){
-                            soluciones.add(c);
-                            ArrayList<CaminoHamiltoniano> solucinesEspecificas = DAOSolucion.obtenerPorDificultad(c,numDificultad,solucionesMax);
-                            soluciones.addAll(solucinesEspecificas);
-                            JSONManager.agregarArchivo(c,solucinesEspecificas);
+                        ArrayList<CaminoHamiltoniano> soluciones = new ArrayList<>();
+                        if(caminos.size()>0){
+                            JSONManager.iniciarArchivo(archivo);
+                            int totalCaminos = caminos.size();
+                            for(CaminoHamiltoniano c: caminos){
+                                soluciones.add(c);
+                                ArrayList<CaminoHamiltoniano> solucinesEspecificas = DAOSolucion.obtenerPorDificultad(c,numDificultad,solucionesMax);
+                                soluciones.addAll(solucinesEspecificas);
+                                JSONManager.agregarArchivo(c,solucinesEspecificas);
+                            }
+                            int totalSoluciones = soluciones.size()-totalCaminos;
+                            String dificultad = soluciones.get(1).obtenerDificultad();
+                            JSONManager.cerrarArchivo(dificultad,totalCaminos,totalSoluciones);
                         }
-                        int totalSoluciones = soluciones.size()-totalCaminos;
-                        String dificultad = soluciones.get(1).obtenerDificultad();
-                        JSONManager.cerrarArchivo(dificultad,totalCaminos,totalSoluciones);
-                    }
 
 
-                    for(int i = 0; i< soluciones.size(); i+=2){
-                        CaminoHamiltoniano[] dupla;
-                        if(i+1<soluciones.size()){
-                            dupla = new CaminoHamiltoniano[]{soluciones.get(i), soluciones.get(i + 1)};
-                        }else {
-                            dupla = new CaminoHamiltoniano[]{soluciones.get(i)};
+                        for(int i = 0; i< soluciones.size(); i+=2){
+                            CaminoHamiltoniano[] dupla;
+                            if(i+1<soluciones.size()){
+                                dupla = new CaminoHamiltoniano[]{soluciones.get(i), soluciones.get(i + 1)};
+                            }else {
+                                dupla = new CaminoHamiltoniano[]{soluciones.get(i)};
+                            }
+                            caminosDoble.add(dupla);
                         }
-                        caminosDoble.add(dupla);
                     }
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            listaCaminos.getItems().clear();
+                            listaCaminos.getItems().addAll(caminosDoble);
+                            progressIndicator.setVisible(false);
+                            if(caminos.size()==0){
+                                AlertManager.mostrarAlerta("No se encontraron soluciones parciales",
+                                        "No se han descubierto soluciones parciales con la dificultad deseada. \nUtiliza la pestaña Algoritmo Genético para buscarlas.");
+                            }
+                            actualizarControles();
+                        }
+                    });
                 }
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        listaCaminos.getItems().clear();
-                        listaCaminos.getItems().addAll(caminosDoble);
-                        progressIndicator.setVisible(false);
-                        if(caminos.size()==0){
-                            mostrarAlerta("No se encontraron soluciones parciales",
-                                    "No se han descubierto soluciones parciales con la dificultad deseada. \n\nUtiliza la pestaña Algoritmo Genético para buscarlas.");
-                        }
-                        actualizarControles();
-                    }
-                });
-            }
-        });
-        hilo.start();
-
+            });
+            hilo.start();
+        }
     }
 
 
@@ -229,28 +231,16 @@ public class ControladorExportar {
         maxSoluciones.setDisable(true);
     }
 
-    private void mostrarAlerta(String titulo, String mensaje){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
-
-    private void mostrarError(String titulo, String mensaje){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
-
     private void volver(){
         try {
+            if(hilo!=null){
+                hilo.stop();
+            }
             AnchorPane nuevoContenedor = FXMLLoader.load(Main.class.getResource("Vistas/VistaMenu.fxml"));
             contenedor.getChildren().setAll(nuevoContenedor);
         } catch (IOException e) {
             e.printStackTrace();
+            AlertManager.alertarError();
         }
     }
 

@@ -3,6 +3,7 @@ package com.hamiltonmaker.Persistencia;
 import com.hamiltonmaker.Comun.Entidades.CaminoHamiltoniano;
 import com.hamiltonmaker.Comun.Entidades.Nodo;
 import com.hamiltonmaker.Comun.Entidades.Tablero;
+import com.hamiltonmaker.Comun.Utils.AlertManager;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,6 +46,7 @@ public class DAOSolucion {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            AlertManager.alertarErrorBD();
         }
         return caminos;
     }
@@ -62,6 +64,7 @@ public class DAOSolucion {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            AlertManager.alertarErrorBD();
         }
         return caminos;
     }
@@ -84,6 +87,7 @@ public class DAOSolucion {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            AlertManager.alertarErrorBD();
         }
         return caminos;
     }
@@ -107,4 +111,5 @@ public class DAOSolucion {
         }
         return  caminoHamiltoniano;
     }
+
 }

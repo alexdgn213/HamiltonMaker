@@ -4,6 +4,7 @@ import com.hamiltonmaker.Comun.AlgoritmoGenetico.AlgotirmoGenetico;
 import com.hamiltonmaker.Comun.Entidades.CaminoHamiltoniano;
 import com.hamiltonmaker.Comun.Entidades.Nodo;
 import com.hamiltonmaker.Comun.Entidades.Tablero;
+import com.hamiltonmaker.Comun.Utils.AlertManager;
 import com.hamiltonmaker.Main;
 import com.hamiltonmaker.Persistencia.DAOCamino;
 import com.hamiltonmaker.Vistas.Celdas.CaminoCellFactory;
@@ -193,8 +194,8 @@ public class ControladorAlgoritmo {
                         listaCaminos.getItems().addAll(caminos);
                         progressIndicator.setVisible(false);
                         if(caminos.size()==0){
-                            mostrarAlerta("No se encontraron caminos hamiltonianos",
-                                    "No se han descubierto caminos hamiltonianos entre los nodos selecionados. \n\nUtiliza la pestaña Generar Caminos para buscarlos.");
+                            AlertManager.mostrarAlerta("No se encontraron caminos hamiltonianos",
+                                    "No se han descubierto caminos hamiltonianos entre los nodos selecionados. \nUtiliza la pestaña Generar Caminos para buscarlos.");
                         }
                         actualizarControles();
                     }
@@ -254,20 +255,19 @@ public class ControladorAlgoritmo {
         listaSoluciones.getItems().clear();
     }
 
-    private void mostrarAlerta(String titulo, String mensaje){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
-
     private void volver(){
         try {
+            if(hilo!=null){
+                hilo.stop();
+            }
+            if(algotirmoGenetico !=null){
+                algotirmoGenetico.stop();
+            }
             AnchorPane nuevoContenedor = FXMLLoader.load(Main.class.getResource("Vistas/VistaMenu.fxml"));
             contenedor.getChildren().setAll(nuevoContenedor);
         } catch (IOException e) {
             e.printStackTrace();
+            AlertManager.alertarError();
         }
     }
 

@@ -1,6 +1,7 @@
 package com.hamiltonmaker.Comun.AlgoritmoGenetico;
 
 import com.hamiltonmaker.Comun.Entidades.CaminoHamiltoniano;
+import com.hamiltonmaker.Comun.Utils.AlertManager;
 import com.hamiltonmaker.Comun.Utils.OutputManager;
 import com.hamiltonmaker.Persistencia.DAOSolucion;
 import com.hamiltonmaker.Vistas.Celdas.CaminoDobleCellFactory;
@@ -20,7 +21,7 @@ public class AlgotirmoGenetico implements Runnable{
     ArrayList<Individuo> poblacion;
     int adyacenciasDeseadas = 1;
     double fitnessTotal;
-    double cohefisienteMutacion = 0.5;
+    double cohefisienteMutacion = 0.7;
     double cohefisienteCruce = 0.5;
     ListView<CaminoHamiltoniano[]> lista;
     Label lPoblacion;
@@ -224,7 +225,7 @@ public class AlgotirmoGenetico implements Runnable{
                         }
                     });
                 } catch (InterruptedException e) {
-
+                    AlertManager.alertarError();
                 }
             }
 

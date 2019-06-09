@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane fx:id="contenedor" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hamiltonmaker.Controladores.ControladorMenu">
+<AnchorPane fx:id="contenedor" prefHeight="650.0" prefWidth="1000.0" styleClass="anchor-pane" stylesheets="@HamiltonMakerTheme.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.hamiltonmaker.Controladores.ControladorMenu">
    <children>
-      <GridPane layoutX="184.0" layoutY="163.0" prefHeight="324.0" prefWidth="633.0">
+      <GridPane layoutX="184.0" layoutY="271.0" prefHeight="324.0" prefWidth="633.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -18,11 +23,33 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="generador" mnemonicParsing="false" prefHeight="70.0" prefWidth="200.0" text="Generador de Caminos" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-            <Button fx:id="algoritmo" mnemonicParsing="false" prefHeight="70.0" prefWidth="200.0" text="Algoritmo Genético" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-            <Button fx:id="soluciones" mnemonicParsing="false" prefHeight="70.0" prefWidth="200.0" text="Ver Soluciones" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-            <Button fx:id="exportar" layoutX="69.0" layoutY="137.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="200.0" text="Exportar Soluciones" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <JFXButton fx:id="generador" mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" styleClass="generador" text="Generador de Caminos" textAlignment="CENTER" wrapText="true" GridPane.halignment="RIGHT" GridPane.valignment="BOTTOM">
+               <GridPane.margin>
+                  <Insets bottom="16.0" right="16.0" />
+               </GridPane.margin></JFXButton>
+            <JFXButton fx:id="algoritmo" mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" styleClass="algoritmo" text="Algoritmo Genético" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM">
+               <GridPane.margin>
+                  <Insets bottom="16.0" left="16.0" />
+               </GridPane.margin></JFXButton>
+            <JFXButton fx:id="soluciones" mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" styleClass="soluciones" text="Ver Soluciones" textAlignment="CENTER" wrapText="true" GridPane.halignment="RIGHT" GridPane.rowIndex="1" GridPane.valignment="TOP">
+               <GridPane.margin>
+                  <Insets right="16.0" top="16.0" />
+               </GridPane.margin></JFXButton>
+            <JFXButton fx:id="exportar" mnemonicParsing="false" prefHeight="100.0" prefWidth="300.0" styleClass="exportar" text="Exportar Soluciones" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="TOP">
+               <GridPane.margin>
+                  <Insets left="16.0" top="16.0" />
+               </GridPane.margin></JFXButton>
          </children>
       </GridPane>
+      <ImageView fitHeight="230.0" fitWidth="400.0" layoutX="300.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../recursos/imagenes/logo.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="285.0" layoutY="595.0" text="Desarrollado por Alexander Garcia - Universidad Católica Ándres Bello">
+         <styleClass>
+            <String fx:value="button" />
+            <String fx:value="common-label" />
+         </styleClass></Label>
    </children>
 </AnchorPane>

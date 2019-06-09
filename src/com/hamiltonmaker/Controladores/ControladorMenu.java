@@ -1,5 +1,6 @@
 package com.hamiltonmaker.Controladores;
 
+import com.hamiltonmaker.Comun.Utils.AlertManager;
 import com.hamiltonmaker.Main;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -60,6 +61,7 @@ public class ControladorMenu {
             contenedor.getChildren().setAll(nuevoContenedor);
         } catch (IOException e) {
             e.printStackTrace();
+            AlertManager.alertarError();
         }
     }
 
@@ -69,6 +71,7 @@ public class ControladorMenu {
             contenedor.getChildren().setAll(nuevoContenedor);
         } catch (IOException e) {
             e.printStackTrace();
+            AlertManager.alertarError();
         }
     }
 
@@ -78,6 +81,7 @@ public class ControladorMenu {
             contenedor.getChildren().setAll(nuevoContenedor);
         } catch (IOException e) {
             e.printStackTrace();
+            AlertManager.alertarError();
         }
     }
 
@@ -87,6 +91,7 @@ public class ControladorMenu {
             contenedor.getChildren().setAll(nuevoContenedor);
         } catch (IOException e) {
             e.printStackTrace();
+            AlertManager.alertarError();
         }
     }
 

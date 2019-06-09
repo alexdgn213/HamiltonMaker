@@ -1,0 +1,157 @@
+* {
+    -fx-primary : #2A2E37;
+    -fx-primary-brigth : rgba(100, 100, 100, 0.61);
+    -fx-secondary : #B2B2B2;
+    -fx-primarytext : #B2B2B2;
+}
+
+.jfx-button ,.custom-alert .button{
+    -jfx-button-type: RAISED;
+    -fx-background-color: -fx-primary;
+    -fx-border-color: -fx-secondary;
+    -fx-text-fill: -fx-primarytext;
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-font-size: 12pt;
+}
+
+
+.jfx-combo-box {
+     -fx-background-color: -fx-primary;
+     -fx-text-fill: -fx-primarytext;
+     -fx-prompt-text-fill: -fx-primarytext;
+     -fx-font-size: 10pt;
+ }
+
+.jfx-text-field {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-primarytext;
+    -fx-font-size: 12pt;
+}
+
+.jfx-combo-box .list-cell:filled:selected {
+    -fx-background-color: -fx-primary-brigth;
+    -fx-text-fill: -fx-primary;
+}
+
+.jfx-combo-box .list-cell {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-primarytext;
+    -fx-font-size: 10pt;
+}
+
+.jfx-list-view {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-primarytext;
+    -fx-prompt-text-fill: -fx-primarytext;
+    -fx-font-size: 10pt;
+}
+
+.jfx-list-view .list-cell:filled:selected {
+    -fx-background-color: -fx-primary-brigth;
+}
+
+.jfx-list-view .list-cell {
+    -fx-background-color: -fx-primary;
+    -fx-text-fill: -fx-primarytext;
+    -fx-font-size: 10pt;
+}
+
+.common-label{
+     -fx-background-color: transparent;
+     -fx-text-fill: -fx-primarytext;
+     -fx-font-size: 10pt;
+ }
+
+.title-label{
+     -fx-background-color: transparent;
+     -fx-text-fill: -fx-primarytext;
+     -fx-font-size: 16pt;
+     -fx-font-weight: bold;
+ }
+
+.anchor-pane{
+    -fx-background-color: -fx-primary;
+}
+
+.split-pane{
+    -fx-background-color: -fx-primary;
+    -fx-border-color: -fx-secondary;
+    -fx-border-radius: 16px;
+    -fx-background-radius: 16px;
+}
+
+.jfx-list-view .scroll-bar:horizontal .track,
+.jfx-list-view .scroll-bar:vertical .track,
+.jfx-combo-box .scroll-bar:horizontal .track{
+    -fx-background-color:-fx-primary;
+    -fx-border-color:-fx-secondary;
+    -fx-background-radius: 0em;
+    -fx-border-radius:2em;
+}
+
+.jfx-list-view .scroll-bar:horizontal .increment-button ,
+.jfx-list-view .scroll-bar:horizontal .decrement-button,
+.jfx-combo-box .scroll-bar:horizontal .increment-button ,
+.jfx-combo-box .scroll-bar:horizontal .decrement-button {
+    -fx-background-color:transparent;
+    -fx-background-radius: 0em;
+    -fx-padding:0 0 10 0;
+}
+
+.jfx-list-view .scroll-bar:vertical .increment-button ,
+.jfx-list-view .scroll-bar:vertical .decrement-button,
+.jfx-combo-box .scroll-bar:vertical .increment-button ,
+.jfx-combo-box .scroll-bar:vertical .decrement-button {
+    -fx-background-color:transparent;
+    -fx-background-radius: 0em;
+    -fx-padding:0 10 0 0;
+}
+
+.jfx-list-view  .scroll-bar .increment-arrow,
+.jfx-list-view  .scroll-bar .decrement-arrow,
+.jfx-combo-box  .scroll-bar .increment-arrow,
+.jfx-combo-box  .scroll-bar .decrement-arrow{
+    -fx-shape:" ";
+    -fx-padding:0;
+}
+
+.jfx-list-view .scroll-bar:horizontal .thumb,
+.jfx-list-view .scroll-bar:vertical .thumb,
+.jfx-combo-box .scroll-bar:vertical .thumb{
+    -fx-background-color:derive(black,90%);
+    -fx-background-insets: 2, 0, 0;
+    -fx-background-radius: 2em;
+}
+
+.custom-alert{
+    -fx-background-color: -fx-primary;
+    -fx-alignment: center;
+}
+
+.custom-alert > *.label.content{
+    -fx-font-size: 14px;
+    -fx-text-fill: -fx-primarytext;
+    -fx-text-alignment: center;
+    -fx-padding: 16;
+}
+
+.generador{
+    -fx-graphic: url("/recursos/imagenes/ic_camino.png");
+}
+
+.algoritmo{
+    -fx-graphic: url("/recursos/imagenes/ic_algoritmo.png");
+}
+
+.soluciones{
+    -fx-graphic: url("/recursos/imagenes/ic_solucion.png");
+}
+
+.exportar{
+    -fx-graphic: url("/recursos/imagenes/ic_guardar.png");
+}
+
+.volver{
+    -fx-graphic: url("/recursos/imagenes/ic_home.png");
+}

@@ -3,6 +3,7 @@ package com.hamiltonmaker.Controladores;
 import com.hamiltonmaker.Comun.Entidades.CaminoHamiltoniano;
 import com.hamiltonmaker.Comun.Entidades.Nodo;
 import com.hamiltonmaker.Comun.Entidades.Tablero;
+import com.hamiltonmaker.Comun.Utils.AlertManager;
 import com.hamiltonmaker.Comun.Utils.JSONManager;
 import com.hamiltonmaker.Comun.Utils.OutputManager;
 import com.hamiltonmaker.Main;
@@ -204,8 +205,8 @@ public class ControladorSoluciones {
                         progressIndicator.setVisible(false);
                         actualizarControles();
                         if(caminos.size()==0){
-                            mostrarAlerta("No se encontraron caminos hamilnonianos",
-                                    "No se han descubierto soluciones parciales para caminos hamiltonianos entre los nodos selecionados. \n\nUtiliza la pestaña Algoritmo Genético para buscarlas.");
+                            AlertManager.mostrarAlerta("No se encontraron caminos hamilnonianos",
+                                    "No se han descubierto soluciones parciales para caminos hamiltonianos entre los nodos selecionados. \nUtiliza la pestaña Algoritmo Genético para buscarlas.");
                         }
                     }
                 });
@@ -250,8 +251,8 @@ public class ControladorSoluciones {
                         listaSoluciones.getItems().addAll(caminosDoble);
                         progressIndicator2.setVisible(false);
                         if(soluciones.size()==0){
-                            mostrarAlerta("No se encontraron soluciones parciales",
-                                    "No se han descubierto soluciones parciales con el número de adyacencias deseado. \n\nUtiliza la pestaña Algoritmo Genético para buscarlas.");
+                            AlertManager.mostrarAlerta("No se encontraron soluciones parciales",
+                                    "No se han descubierto soluciones parciales con el número de adyacencias deseado. \nUtiliza la pestaña Algoritmo Genético para buscarlas.");
                         }
                         actualizarControles();
                     }
@@ -304,20 +305,16 @@ public class ControladorSoluciones {
         exportar.setDisable(true);
     }
 
-    private void mostrarAlerta(String titulo, String mensaje){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
-
     private void volver(){
         try {
+            if(hilo!=null){
+                hilo.stop();
+            }
             AnchorPane nuevoContenedor = FXMLLoader.load(Main.class.getResource("Vistas/VistaMenu.fxml"));
             contenedor.getChildren().setAll(nuevoContenedor);
         } catch (IOException e) {
             e.printStackTrace();
+            AlertManager.alertarError();
         }
     }
 

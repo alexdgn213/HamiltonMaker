@@ -100,6 +100,7 @@ public class JSONManager {
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
+            AlertManager.alertarError();
         }
     }
 
@@ -112,6 +113,7 @@ public class JSONManager {
 
         } catch (IOException e) {
             e.printStackTrace();
+            AlertManager.alertarError();
         }
     }
 
@@ -128,6 +130,7 @@ public class JSONManager {
             writerGlobal.endObject();
         } catch (IOException e) {
             e.printStackTrace();
+            AlertManager.alertarError();
         }
 
     }
@@ -141,6 +144,7 @@ public class JSONManager {
             writerGlobal.close();
         } catch (IOException e) {
             e.printStackTrace();
+            AlertManager.alertarError();
         }
     }
 }

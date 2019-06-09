@@ -1,5 +1,7 @@
 package com.hamiltonmaker.Persistencia;
 
+import com.hamiltonmaker.Comun.Utils.AlertManager;
+
 import java.sql.*;
 
 public class ConexionSQL {
@@ -11,8 +13,8 @@ public class ConexionSQL {
                 conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hamiltonpaths", "postgres", "postgres");
 
             } catch (SQLException e) {
-                System.out.println("Connection failure.");
                 e.printStackTrace();
+                AlertManager.alertarErrorBD();
             }
         }
         return conexion;
@@ -23,8 +25,8 @@ public class ConexionSQL {
             try {
                 conexion.close();
             } catch (SQLException e) {
-                System.out.println("Connection failure.");
                 e.printStackTrace();
+                AlertManager.alertarErrorBD();
             }
         }
     }
