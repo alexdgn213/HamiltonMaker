@@ -48,6 +48,7 @@ public class ControladorExportar {
 
     File archivo;
     Thread hilo;
+    ArrayList<CaminoHamiltoniano> caminos;
 
     @FXML
     private void initialize() {
@@ -131,13 +132,19 @@ public class ControladorExportar {
         }
     }
 
-
-
     private void exportar(){
         progressIndicator.setVisible(true);
         bloquearControles();
         listaCaminos.getItems().clear();
         archivo = OutputManager.abrirfileChooser(contenedor);
+        if(!maxCaminos.getText().matches("[0-9]*") && maxCaminos.getText().length()==0){
+            mostrarError("Valor inválido",
+                    "Ha ingresado un máximo de caminos hamiltonianos no válido.");
+        }
+        else if(!maxSoluciones.getText().matches("[0-9]*") && maxSoluciones.getText().length()==0){
+            mostrarError("Valor inválido",
+                    "Ha ingresado un máximo de soluciones parciales no válido.");
+        }
         hilo = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -149,7 +156,7 @@ public class ControladorExportar {
                     int sizeMin = (int) minSize.getValue();
                     int sizeMax = (int) maxSize.getValue();
 
-                    ArrayList<CaminoHamiltoniano> caminos = new ArrayList<>();
+                    caminos = new ArrayList<>();
 
                     caminos = DAOCamino.obtenerPorDificultad(sizeMin,sizeMax,numDificultad,caminosMax);
 
@@ -185,6 +192,10 @@ public class ControladorExportar {
                         listaCaminos.getItems().clear();
                         listaCaminos.getItems().addAll(caminosDoble);
                         progressIndicator.setVisible(false);
+                        if(caminos.size()==0){
+                            mostrarAlerta("No se encontraron soluciones parciales",
+                                    "No se han descubierto soluciones parciales con la dificultad deseada. \n\nUtiliza la pestaña Algoritmo Genético para buscarlas.");
+                        }
                         actualizarControles();
                     }
                 });
@@ -216,6 +227,22 @@ public class ControladorExportar {
         exportar.setDisable(true);
         maxCaminos.setDisable(true);
         maxSoluciones.setDisable(true);
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    private void mostrarError(String titulo, String mensaje){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     private void volver(){

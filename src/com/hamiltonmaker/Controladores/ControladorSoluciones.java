@@ -203,6 +203,10 @@ public class ControladorSoluciones {
                         listaCaminos.getItems().addAll(caminos);
                         progressIndicator.setVisible(false);
                         actualizarControles();
+                        if(caminos.size()==0){
+                            mostrarAlerta("No se encontraron caminos hamilnonianos",
+                                    "No se han descubierto soluciones parciales para caminos hamiltonianos entre los nodos selecionados. \n\nUtiliza la pestaña Algoritmo Genético para buscarlas.");
+                        }
                     }
                 });
             }
@@ -245,6 +249,10 @@ public class ControladorSoluciones {
                         listaSoluciones.getItems().clear();
                         listaSoluciones.getItems().addAll(caminosDoble);
                         progressIndicator2.setVisible(false);
+                        if(soluciones.size()==0){
+                            mostrarAlerta("No se encontraron soluciones parciales",
+                                    "No se han descubierto soluciones parciales con el número de adyacencias deseado. \n\nUtiliza la pestaña Algoritmo Genético para buscarlas.");
+                        }
                         actualizarControles();
                     }
                 });
@@ -294,6 +302,14 @@ public class ControladorSoluciones {
         buscar.setDisable(true);
         seleccionar.setDisable(true);
         exportar.setDisable(true);
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     private void volver(){

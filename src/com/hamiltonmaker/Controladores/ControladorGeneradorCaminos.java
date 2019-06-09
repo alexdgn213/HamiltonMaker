@@ -12,10 +12,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ProgressIndicator;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -44,6 +41,7 @@ public class ControladorGeneradorCaminos {
 
     Tablero tablero;
     CaminoHamiltoniano caminoVacio;
+    ArrayList<CaminoHamiltoniano> caminos;
     Thread hilo;
 
 
@@ -151,7 +149,7 @@ public class ControladorGeneradorCaminos {
         hilo = new Thread(new Runnable() {
             @Override
             public void run() {
-                ArrayList<CaminoHamiltoniano> caminos = new ArrayList<>();
+                caminos = new ArrayList<>();
                 if(tablero.getInicio()>=0 && tablero.getFin()>=0){
                     caminos = DAOCamino.obtenerCaminos((int) size.getValue(), (int)inicio.getValue(), (int) fin.getValue());
                 }
@@ -190,6 +188,10 @@ public class ControladorGeneradorCaminos {
                         listaCaminos.getItems().addAll(caminosDoble);
                         progressIndicator.setVisible(false);
                         actualizarControles();
+                        if(caminos.size()==0){
+                            mostrarAlerta("No se encontraron caminos hamiltonianos",
+                                    "No existen caminos hamiltonianos entre los nodos selecionados. \n\nUtiliza la pestaña Generar Caminos para buscarlos.");
+                        }
                     }
                 });
             }
@@ -220,6 +222,14 @@ public class ControladorGeneradorCaminos {
         fin.setDisable(true);
         generar.setDisable(true);
         listaCaminos.getItems().clear();
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     private void volver(){

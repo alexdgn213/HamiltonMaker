@@ -192,6 +192,10 @@ public class ControladorAlgoritmo {
                         listaCaminos.getItems().clear();
                         listaCaminos.getItems().addAll(caminos);
                         progressIndicator.setVisible(false);
+                        if(caminos.size()==0){
+                            mostrarAlerta("No se encontraron caminos hamiltonianos",
+                                    "No se han descubierto caminos hamiltonianos entre los nodos selecionados. \n\nUtiliza la pestaña Generar Caminos para buscarlos.");
+                        }
                         actualizarControles();
                     }
                 });
@@ -248,6 +252,14 @@ public class ControladorAlgoritmo {
         iniciar.setDisable(true);
         listaCaminos.getItems().clear();
         listaSoluciones.getItems().clear();
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 
     private void volver(){
