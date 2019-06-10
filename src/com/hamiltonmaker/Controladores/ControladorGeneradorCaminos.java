@@ -19,6 +19,10 @@ import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Descripción: Controlador de la vista Generador de Caminos
+ * Autor: Alexander Garcia
+ */
 public class ControladorGeneradorCaminos {
 
     @FXML

@@ -9,22 +9,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Descripción: Clase encargada del manejo de archivos externos
+ * Autor: Alexander Garcia
+ */
 public class OutputManager {
 
     private static boolean activo = false;
 
-
-
-    public  static void limpiarDatos(){
-        try {
-            FileWriter tiempos = new FileWriter("tiempos.txt");
-            tiempos.close();
-            FileWriter poblaciones= new FileWriter("poblaciones.txt",true);
-            poblaciones.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public  static void imprimirTiempo(String mensaje){
         try {

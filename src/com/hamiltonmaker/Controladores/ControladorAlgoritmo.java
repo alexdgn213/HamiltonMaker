@@ -20,6 +20,10 @@ import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Descripción: Controlador de la vista Algoritmo Genético
+ * Autor: Alexander Garcia
+ */
 public class ControladorAlgoritmo {
 
     @FXML

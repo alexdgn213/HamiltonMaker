@@ -11,6 +11,10 @@ import javafx.scene.control.ListView;
 
 import java.util.ArrayList;
 
+/**
+ * Descripción: Clase encargada de gestionar el algoritmo genetico y sus poblaciones en segundo plano
+ * Autor: Alexander Garcia
+ */
 public class AlgotirmoGenetico implements Runnable{
     private Thread hilo;
     private boolean activo;

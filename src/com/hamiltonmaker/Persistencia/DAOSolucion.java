@@ -10,6 +10,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Descripción: Clase encagada de almacenar y buscar soluciones en la base de datos
+ * Autor: Alexander Garcia
+ */
 public class DAOSolucion {
 
     public static void saveSolucion(CaminoHamiltoniano caminoHamiltoniano){

@@ -9,6 +9,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.lang.Math;
 
+
+/**
+ * Descripción: Clase que representa un camino hamiltoniano o una solucion parcial junto con
+ * sus operaciones básicas
+ * Autor: Alexander Garcia
+ */
 public class CaminoHamiltoniano {
     private int id;
     private List<Nodo> nodos; //Nodos que conforman el camino.
@@ -127,17 +133,6 @@ public class CaminoHamiltoniano {
         dibujar(gc,2,offset);
     }
 
-    public void dibujarTres(GraphicsContext gc, int pos){
-        double x = gc.getCanvas().getWidth()/3;
-        double offset = 0;
-        if(pos%2!=0){
-            offset = x;
-        } else if(pos%3!=0){
-            offset = 2*x;
-        }
-        dibujar(gc,3,offset);
-    }
-
     public void dibujar(GraphicsContext gc,int columnas, double offset){
         double x = gc.getCanvas().getWidth()/columnas;
         double y = gc.getCanvas().getHeight();
@@ -232,21 +227,7 @@ public class CaminoHamiltoniano {
         return intersecciones;
     }
 
-
-    public boolean contiene(CaminoHamiltoniano camino){
-        boolean contenido = true;
-        if(this.inicio!=camino.inicio || this.fin!=camino.fin)
-            contenido = false;
-        for(int i=0; i<this.nodos.size() && contenido; i++){
-            if(!this.nodos.get(i).compararSiguiente(camino.nodos.get(i)) ||
-                    (this.nodos.get(i).getSiguiente()==null && camino.nodos.get(i).getSiguiente()!=null)){
-                contenido = false;
-            }
-        }
-        return contenido;
-    }
-
-    public boolean contieneCromosoma(CaminoHamiltoniano camino){
+    public boolean contieneSubconjunto(CaminoHamiltoniano camino){
         boolean contenido = true;
         for(int i=0; i<this.nodos.size() && contenido; i++){
             if(camino.getNodos().get(i).isVisible() && camino.getNodos().get(i).isHabilitado()){
@@ -257,7 +238,6 @@ public class CaminoHamiltoniano {
                     contenido = false;
                 }
             }
-
         }
         return contenido;
     }
@@ -272,7 +252,7 @@ public class CaminoHamiltoniano {
         return igual;
     }
 
-    public boolean compararCromosoma(CaminoHamiltoniano camino){
+    public boolean compararSubconjunto(CaminoHamiltoniano camino){
         boolean igual = true;
         for(int i=0; i<this.nodos.size() && igual; i++){{
             if(this.getNodos().get(i).isVisible()!=camino.getNodos().get(i).isVisible())
@@ -317,7 +297,7 @@ public class CaminoHamiltoniano {
 
     public static void agregarALista(ArrayList<CaminoHamiltoniano> lista, CaminoHamiltoniano camino){
         for( CaminoHamiltoniano c : lista)
-            if(c.compararCromosoma(camino)){
+            if(c.compararSubconjunto(camino)){
                 return;
             }
         lista.add(camino.clonar());

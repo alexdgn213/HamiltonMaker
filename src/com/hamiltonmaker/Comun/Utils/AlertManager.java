@@ -1,21 +1,30 @@
 package com.hamiltonmaker.Comun.Utils;
 
-import com.hamiltonmaker.Main;
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+/**
+ * Descripción: Clase auxiliar para mostrar mensajes en pantalla
+ * Autor: Alexander Garcia
+ */
 public class AlertManager {
 
     public static void mostrarAlerta(String titulo, String mensaje){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setGraphic(null);
-        alert.setContentText("\n"+mensaje);
-        styleAlert(alert);
-        alert.showAndWait();
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle(titulo);
+                alert.setHeaderText(null);
+                alert.setGraphic(null);
+                alert.setContentText("\n"+mensaje);
+                styleAlert(alert);
+                alert.showAndWait();
+            }
+        });
     }
 
     private static void styleAlert(Alert alert) {

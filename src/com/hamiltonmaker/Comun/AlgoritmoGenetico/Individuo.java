@@ -7,6 +7,11 @@ import java.util.ArrayList;
 
 import static java.lang.Math.abs;
 
+/**
+ * Descripción: Clase que representa a un individuo en el algoritmo y en la que se manejan sus
+ * funciones básicas
+ * Autor: Alexander Garcia
+ */
 public class Individuo {
     CaminoHamiltoniano caminoHamiltoniano;
     double fitness;
@@ -66,7 +71,7 @@ public class Individuo {
     public double funcionFitness(ArrayList<CaminoHamiltoniano> limitaciones,int adyacenciasDeseadas){
         int soluciones = 0;
         for (CaminoHamiltoniano c : limitaciones){
-            if (c.contieneCromosoma(caminoHamiltoniano))
+            if (c.contieneSubconjunto(caminoHamiltoniano))
                 soluciones ++;
         }
         if (soluciones == 0) {
@@ -76,7 +81,6 @@ public class Individuo {
             solucion = false;
         }
         this.evaluacion = abs(caminoHamiltoniano.getVisibles()-adyacenciasDeseadas)+(soluciones);
-        //this.evaluacion = (soluciones);
         this.fitness = 1.0/(1.0+this.evaluacion);
         return this.fitness;
     }
@@ -102,7 +106,6 @@ public class Individuo {
     public void funcionDeMutacion(){
         int posicion = (int) (Math.random()*(caminoHamiltoniano.getNodos().size()-1));
         if(caminoHamiltoniano.getNodos().get(posicion).isHabilitado()){
-            //System.out.print(" en el gen "+posicion);
             caminoHamiltoniano.alterarNodo(posicion);
         }
     }

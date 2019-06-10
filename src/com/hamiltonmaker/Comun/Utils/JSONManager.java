@@ -9,6 +9,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Descripción: Clase encargada de generar archivos .json con caminos hamiltonianos y soluciones parciales
+ * Autor: Alexander Garcia
+ */
 public class JSONManager {
     private static JsonWriter writerGlobal;
 

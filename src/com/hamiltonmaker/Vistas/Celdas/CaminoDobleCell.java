@@ -5,6 +5,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ListCell;
 
+/**
+ * Descripción: Celda para dibujar dos camninos hamiltonianos o soluciones en pantalla
+ * Autor: Alexander Garcia
+ */
 public class CaminoDobleCell extends ListCell<CaminoHamiltoniano[]> {
     @Override
     public void updateItem(CaminoHamiltoniano item[], boolean empty)

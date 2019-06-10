@@ -4,13 +4,17 @@ import com.hamiltonmaker.Comun.Utils.AlertManager;
 
 import java.sql.*;
 
+/**
+ * Descripción: Singleton para el manejo de la conexión a la base de datos
+ * Autor: Alexander Garcia
+ */
 public class ConexionSQL {
     private static Connection conexion;
 
     public static Connection getConexion(){
         if(conexion==null){
             try {
-                conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hamiltonpaths", "postgres", "postgres");
+                conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/hamiltonpaths", "HamiltonMaker", "hamilton");
 
             } catch (SQLException e) {
                 e.printStackTrace();

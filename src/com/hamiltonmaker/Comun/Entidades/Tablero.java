@@ -5,6 +5,10 @@ import com.hamiltonmaker.Persistencia.DAOCamino;
 
 import java.util.*;
 
+/**
+ * Descripción: Clase que representa un tablero con todos sus nodos conectados
+ * Autor: Alexander Garcia
+ */
 public class Tablero {
     private Map<Nodo, LinkedHashSet<Nodo>> map = new HashMap();
     private ArrayList<Nodo> nodos;
@@ -94,19 +98,6 @@ public class Tablero {
             }
             adjacent.add(node2);
         }
-    }
-
-    public void addTwoWayVertex(Nodo node1, Nodo node2) {
-        addEdge(node1, node2);
-        addEdge(node2, node1);
-    }
-
-    public boolean isConnected(Nodo node1, Nodo node2) {
-        Set adjacent = map.get(node1);
-        if(adjacent==null) {
-            return false;
-        }
-        return adjacent.contains(node2);
     }
 
     public LinkedList<Nodo> adjacentNodes(Nodo last) {

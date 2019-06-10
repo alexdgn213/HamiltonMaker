@@ -12,6 +12,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Descripción: Clase principal de la aplicación
+ * Autor: Alexander Garcia
+ */
 public class Main extends Application {
 
     private Stage primaryStage;

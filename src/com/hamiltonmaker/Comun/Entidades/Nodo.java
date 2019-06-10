@@ -1,6 +1,9 @@
 package com.hamiltonmaker.Comun.Entidades;
 
-// Clase que representa un nodo en un camino hamiltoniano
+/**
+ * Descripción: Clase que representa un nodo en un tablero, camino hamiltoniano o solución parcial
+ * Autor: Alexander Garcia
+ */
 public class Nodo {
     private int posX; //Indica la posicion X del nodo en el espacio.
     private int posY; //Indica la posicion Y del nodo en el espacion.

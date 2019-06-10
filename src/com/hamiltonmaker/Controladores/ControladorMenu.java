@@ -11,6 +11,10 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
+/**
+ * Descripción: Controlador de la vista de Menu Principal
+ * Autor: Alexander Garcia
+ */
 public class ControladorMenu {
 
     @FXML

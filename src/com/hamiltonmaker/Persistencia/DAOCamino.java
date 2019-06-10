@@ -10,6 +10,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Descripción: Clase encagada de almacenar y buscar caminos en la base de datos
+ * Autor: Alexander Garcia
+ */
 public class DAOCamino {
 
     public static void saveCamino(CaminoHamiltoniano caminoHamiltoniano){

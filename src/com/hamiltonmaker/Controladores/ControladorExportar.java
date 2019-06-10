@@ -24,6 +24,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Descripción: Controlador de la vista Exportar Soluciones
+ * Autor: Alexander Garcia
+ */
 public class ControladorExportar {
 
     @FXML
