@@ -199,7 +199,8 @@ public class CaminoHamiltoniano {
         }
         for(int i =0; i<nuevoCamino.nodos.size();i++){
             if(this.nodos.get(i).getSiguiente()!=null)
-                nuevoCamino.nodos.get(i).setSiguiente(nuevoCamino.nodos.get(this.nodos.indexOf(this.nodos.get(i).getSiguiente())));
+                nuevoCamino.nodos.get(i).setSiguiente(
+                	nuevoCamino.nodos.get(this.nodos.indexOf(this.nodos.get(i).getSiguiente())));
         }
         return nuevoCamino;
     }
@@ -223,7 +224,7 @@ public class CaminoHamiltoniano {
         ArrayList<CaminoHamiltoniano> intersecciones = new ArrayList<CaminoHamiltoniano>();
         for (CaminoHamiltoniano c : caminos)
             if(!camino1.comparar(c))
-                intersecciones.add(intersectar(camino1,c));
+                intersecciones.add(c);
         return intersecciones;
     }
 
@@ -233,6 +234,10 @@ public class CaminoHamiltoniano {
             if(camino.getNodos().get(i).isVisible() && camino.getNodos().get(i).isHabilitado()){
                 if(this.getNodos().get(i).isVisible()){
                     contenido = this.getNodos().get(i).compararSiguiente(camino.getNodos().get(i));
+                    if(!contenido){
+                        contenido = this.nodos.get(i).compararCruce(camino.buscarNodo(this.nodos.get(i).getSiguiente())) ||
+                                camino.nodos.get(i).compararCruce(this.buscarNodo(camino.nodos.get(i).getSiguiente()));
+                    }
                 }
                 else{
                     contenido = false;
@@ -280,6 +285,14 @@ public class CaminoHamiltoniano {
         if(nodos.get(posicion).isVisible()!=padre.getNodos().get(posicion).isVisible()){
             alterarNodo(posicion);
         }
+    }
+
+    public Nodo buscarNodo(Nodo nodo){
+        for(Nodo n: nodos){
+            if(n.comparar(nodo))
+                return n;
+        }
+        return null;
     }
 
     public String obtenerDificultad(){

@@ -50,7 +50,7 @@ class IndividuoTest {
         camino2.getNodos().get(5).setSiguiente(camino2.getNodos().get(8));
 
         restricciones = new ArrayList<>();
-        restricciones.add(CaminoHamiltoniano.intersectar(caminoHamiltoniano,camino2));
+        restricciones.add(camino2);
 
     }
 
@@ -82,6 +82,7 @@ class IndividuoTest {
         assertEquals(2,individuo2.getEvaluacion());
     }
 
+    @Disabled
     @Test
     void funcionDeCruce() {
         Individuo hijo1 = new Individuo();

@@ -25,8 +25,9 @@ public class AlgotirmoGenetico implements Runnable{
     ArrayList<Individuo> poblacion;
     int adyacenciasDeseadas = 1;
     double fitnessTotal;
-    double cohefisienteMutacion = 0.7;
-    double cohefisienteCruce = 0.5;
+    double coeficienteMutacion = 0.5;
+    double coeficienteCruce = 0.7;
+    int sizePoblacion = 20;
     ListView<CaminoHamiltoniano[]> lista;
     Label lPoblacion;
     Label lSolucionesOptimas;
@@ -68,12 +69,36 @@ public class AlgotirmoGenetico implements Runnable{
         this.poblacion = poblacion;
     }
 
+    public double getCoeficienteMutacion() {
+        return coeficienteMutacion;
+    }
+
+    public void setCoeficienteMutacion(double coeficienteMutacion) {
+        this.coeficienteMutacion = coeficienteMutacion;
+    }
+
+    public double getCoeficienteCruce() {
+        return coeficienteCruce;
+    }
+
+    public void setCoeficienteCruce(double coeficienteCruce) {
+        this.coeficienteCruce = coeficienteCruce;
+    }
+
+    public int getSizePoblacion() {
+        return sizePoblacion;
+    }
+
+    public void setSizePoblacion(int sizePoblacion) {
+        this.sizePoblacion = sizePoblacion;
+    }
+
     public void Iniciar(){
 
     }
 
     public void generarPoblacionInicial(){
-        for(int c = 0; c<20; c++){
+        for(int c = 0; c<sizePoblacion; c++){
             Individuo individuo = new Individuo(camino);
             int adyacenciasAfectadas = (int) (Math.random()*(individuo.caminoHamiltoniano.getNodos().size()-3-individuo.caminoHamiltoniano.getInhabilitados())+1);
             individuo.alterarNodos(adyacenciasAfectadas);
@@ -109,7 +134,7 @@ public class AlgotirmoGenetico implements Runnable{
     public void mutarPoblacion(){
         for(Individuo individuo: poblacion){
             double probabilidad = Math.random();
-            if(probabilidad<=cohefisienteMutacion){
+            if(probabilidad<= coeficienteMutacion){
                 individuo.funcionDeMutacion();
             }
         }
@@ -139,7 +164,7 @@ public class AlgotirmoGenetico implements Runnable{
             }
             Individuo hijo1 = new Individuo();
             Individuo hijo2 = new Individuo();
-            if(probabilidad<=cohefisienteCruce){
+            if(probabilidad<= coeficienteCruce){
                 Individuo.funcionDeCruce(padre1,padre2,hijo1,hijo2);
             }
             else{
@@ -183,14 +208,30 @@ public class AlgotirmoGenetico implements Runnable{
         int i= 0;
         Dibujante dibujante = new Dibujante();
         dibujante.start();
+        System.out.println("------------------------------------------------------------------");
+        System.out.println("Tamaño: "+this.camino.getNodos().size());
+        System.out.println("Poblacion: "+ sizePoblacion);
+        System.out.println("Cruce: "+ coeficienteCruce);
+        System.out.println("Mutacion: "+ coeficienteMutacion);
+        System.out.println();
+        long tinicio = System.currentTimeMillis();
+        int j = 0;
         while(activo){
             if(!pausado){
                 calcularFitness();
                 OutputManager.imprimirPoblacion(i,this.poblacion);
                 reproducirPoblacion();
                 mutarPoblacion();
+                if(System.currentTimeMillis()>tinicio+10000 && j<6){
+                    j++;
+                    tinicio = System.currentTimeMillis();
+                    System.out.println("Datos luego de " + j*10 + " Sg:");
+                    System.out.println("    Poblacion: "+numPoblacion);
+                    System.out.println("    Soluciones encontradas: "+solucionesOptimas.size());
+                }
                 i++;
                 numPoblacion++;
+
             }
         }
         dibujante.stop();
@@ -198,6 +239,7 @@ public class AlgotirmoGenetico implements Runnable{
         for (CaminoHamiltoniano c: solucionesOptimas){
             DAOSolucion.saveSolucion(c);
         }
+        solucionesOptimas.clear();
     }
 
     class Dibujante implements Runnable{

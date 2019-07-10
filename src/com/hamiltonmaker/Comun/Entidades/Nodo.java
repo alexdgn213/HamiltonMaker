@@ -64,14 +64,27 @@ public class Nodo {
     }
 
     public boolean compararSiguiente(Nodo nodo2){
-        boolean resultado = (this.getPosX()==nodo2.posX) && (this.posY==nodo2.posY);
+        boolean resultado = this.comparar(nodo2);
         if((this.siguiente!=null) && (nodo2.siguiente!=null)){
-            resultado = resultado && (this.siguiente.posX==nodo2.getSiguiente().posX) && (this.siguiente.posY==nodo2.getSiguiente().posY);
+            resultado = resultado && this.siguiente.comparar(nodo2.getSiguiente());
         }
         else if((this.siguiente == null) != (nodo2.siguiente == null)){
             resultado = false;
         }
         return resultado;
+    }
+
+    public boolean compararCruce(Nodo nodo2){
+        boolean resultado = false;
+        if((this.siguiente!=null) && (nodo2.siguiente!=null)){
+            if(!this.comparar(nodo2))
+                resultado = nodo2.siguiente.comparar(this);
+        }
+        return resultado;
+    }
+
+    public boolean comparar(Nodo nodo2){
+        return this.posX==nodo2.posX && this.posY == nodo2.posY;
     }
 
     public Nodo clonar(){

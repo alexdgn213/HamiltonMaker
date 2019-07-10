@@ -3,6 +3,7 @@ package com.hamiltonmaker.Pruebas;
 import com.hamiltonmaker.Comun.Entidades.CaminoHamiltoniano;
 import com.hamiltonmaker.Comun.Entidades.Tablero;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

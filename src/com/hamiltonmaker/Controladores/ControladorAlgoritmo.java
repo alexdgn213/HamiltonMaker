@@ -52,6 +52,12 @@ public class ControladorAlgoritmo {
     Label numPoblacion;
     @FXML
     Label numSolucionesOptimas;
+    @FXML
+    TextField poblacion;
+    @FXML
+    TextField cruce;
+    @FXML
+    TextField mutacion;
 
     Tablero tablero;
     CaminoHamiltoniano caminoVacio;
@@ -69,6 +75,9 @@ public class ControladorAlgoritmo {
         size.getItems().addAll(3,4,5,6,7);
         listaCaminos.setCellFactory(new CaminoCellFactory());
         progressIndicator.setVisible(false);
+        poblacion.setText("20");
+        cruce.setText("0.7");
+        mutacion.setText("0.5");
 
         size.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -218,6 +227,9 @@ public class ControladorAlgoritmo {
             if(caminoHamiltoniano!=null){
                 ArrayList<CaminoHamiltoniano> caminosInt = CaminoHamiltoniano.intersectar(caminoHamiltoniano,caminos);
                 algotirmoGenetico = new AlgotirmoGenetico(caminoHamiltoniano,caminosInt,listaSoluciones,1+(int) adyacencias.getValue(),numPoblacion,numSolucionesOptimas);
+                algotirmoGenetico.setSizePoblacion(Integer.valueOf(poblacion.getText()));
+                algotirmoGenetico.setCoeficienteCruce(Double.valueOf(cruce.getText()));
+                algotirmoGenetico.setCoeficienteMutacion((Double.valueOf(mutacion.getText())));
                 algotirmoGenetico.start();
             }
         } else{
